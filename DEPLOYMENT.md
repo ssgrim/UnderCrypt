@@ -7,6 +7,7 @@ Your UnderCrypt web app is now built and ready to share! The production-ready fi
 ### Option 1: Deploy to GitHub Pages (FREE, Recommended)
 
 1. Push your project to GitHub (if not already):
+
    ```powershell
    git add .
    git commit -m "Ready for deployment"
@@ -20,6 +21,7 @@ Your UnderCrypt web app is now built and ready to share! The production-ready fi
 4. Select branch: `main` and folder: `web/dist`
 
 5. Save - GitHub will automatically deploy your site to:
+
    ```
    https://<your-username>.github.io/<repo-name>/
    ```
@@ -64,6 +66,7 @@ npm run preview -- --host 0.0.0.0
 ```
 
 Then share your IP address with your nephew:
+
 - Find your IP: Open PowerShell and run `ipconfig`
 - Look for "IPv4 Address" (usually 192.168.x.x)
 - Share: `http://<your-ip>:4173/`
@@ -73,11 +76,13 @@ Then share your IP address with your nephew:
 After making any changes to the game code:
 
 1. **From root**, rebuild the core game engine:
+
    ```powershell
    npm run build
    ```
 
 2. Navigate to web folder and rebuild:
+
    ```powershell
    cd web
    npm run build

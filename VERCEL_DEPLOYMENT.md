@@ -35,6 +35,7 @@ Replace `<YOUR-USERNAME>` with your actual GitHub username.
 ## Step 4: Get Your Shareable URL
 
 After deployment completes, you'll see your live URL in the format:
+
 ```
 https://undercrypt-<random>.vercel.app
 ```
@@ -44,6 +45,7 @@ Share this URL with your nephew! 🎮
 ## Automatic Updates
 
 Every time you push code to GitHub:
+
 ```powershell
 git add -A
 git commit -m "Your changes"
@@ -55,12 +57,14 @@ Vercel will **automatically rebuild and deploy** your changes. No manual steps n
 ## Troubleshooting
 
 **If deployment fails:**
+
 1. Go to your Vercel dashboard
 2. Click on your project
 3. Check the "Deployments" tab for error messages
 4. Common fix: Make sure `web/` folder has a `package.json` (it does ✓)
 
 **If you want to redeploy:**
+
 - Go to Vercel dashboard → Your project → Deployments
 - Click the "..." menu on the latest deployment
 - Select "Redeploy"
@@ -68,6 +72,7 @@ Vercel will **automatically rebuild and deploy** your changes. No manual steps n
 ## What Happens Under the Hood
 
 Vercel will:
+
 1. ✓ Install dependencies from `web/package.json`
 2. ✓ Run `npm run build` automatically
 3. ✓ Serve the built files from `web/dist/`

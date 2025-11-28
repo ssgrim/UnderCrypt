@@ -2,40 +2,56 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
   color: #eee;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="%232a4d7a" stroke-width="0.5"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)" opacity="0.2"/></svg>');
+  background-attachment: fixed;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
 }
 
 .app-header {
-  background: #222;
-  border-bottom: 2px solid #555;
+  background: linear-gradient(90deg, #0a0e27 0%, #1a3a52 100%);
+  border-bottom: 3px solid #4a90e2;
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
 }
 
 .app-header h1 {
   font-size: 24px;
   margin: 0;
+  color: #4a90e2;
+  text-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+  letter-spacing: 1px;
 }
 
 .start-btn {
-  background: #4a9;
-  border: none;
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  border: 2px solid #2a7;
   border-radius: 6px;
   padding: 10px 20px;
   color: #fff;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   font-size: 14px;
+  box-shadow: 0 4px 10px rgba(74, 170, 153, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .start-btn:hover {
-  background: #3a8;
-  box-shadow: 0 0 12px rgba(74, 170, 153, 0.5);
+  background: linear-gradient(135deg, #3a8 0%, #28a 100%);
+  box-shadow: 0 0 20px rgba(74, 170, 153, 0.6);
+  transform: translateY(-2px);
+}
+
+.start-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(74, 170, 153, 0.4);
 }
 
 .game-container {
@@ -54,27 +70,37 @@
   align-items: center;
   gap: 20px;
   text-align: center;
+  animation: fadeIn 0.5s ease-in;
 }
 
 .start-screen h2 {
-  font-size: 32px;
+  font-size: 48px;
+  margin: 0;
+  color: #4a90e2;
+  text-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
+  font-weight: bold;
 }
 
 .start-screen p {
   font-size: 18px;
   color: #aaa;
+  margin: 0;
+  opacity: 0.8;
 }
 
 .message {
   position: absolute;
   bottom: 20px;
   left: 20px;
-  background: #f44;
+  background: linear-gradient(135deg, #f44 0%, #c22 100%);
   color: #fff;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 12px 18px;
+  border-radius: 6px;
   font-size: 14px;
-  animation: fadeIn 0.2s;
+  font-weight: bold;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+  border-left: 4px solid #ff6666;
 }
 
 @keyframes fadeIn {
@@ -88,47 +114,102 @@
   }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(74, 170, 153, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(74, 170, 153, 0.6);
+  }
+}
+
 .game-over {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(2px);
 }
 
 .game-over .modal {
-  background: #333;
-  border: 2px solid #4a9;
-  border-radius: 8px;
-  padding: 30px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 3px solid #4a90e2;
+  border-radius: 12px;
+  padding: 40px;
   text-align: center;
-  min-width: 300px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  min-width: 350px;
+  box-shadow: 0 8px 32px rgba(74, 144, 226, 0.4);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .game-over .modal p {
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 25px;
+  margin-top: 0;
+  color: #4a90e2;
+  font-weight: bold;
 }
 
 .game-over .modal button {
-  background: #4a9;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 24px;
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  border: 2px solid #2a7;
+  border-radius: 8px;
+  padding: 14px 28px;
   color: #fff;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: 14px;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(74, 170, 153, 0.2);
 }
 
 .game-over .modal button:hover {
-  background: #3a8;
-  box-shadow: 0 0 12px rgba(74, 170, 153, 0.5);
+  background: linear-gradient(135deg, #3a8 0%, #28a 100%);
+  box-shadow: 0 0 24px rgba(74, 170, 153, 0.6);
+  transform: translateY(-2px);
+}
+
+.game-over .modal button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(74, 170, 153, 0.4);
 }

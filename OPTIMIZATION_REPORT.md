@@ -3,18 +3,21 @@
 ## Optimizations Completed ✅
 
 ### 1. **Vite Build Configuration**
+
 - ✅ Enabled code splitting with manual chunks for React
 - ✅ Set target to ES2020 for modern browser optimizations
 - ✅ Added terser minification with dead code elimination
 - ✅ Drop console statements in production
 
 ### 2. **React Component Optimization**
+
 - ✅ Wrapped all GameBoard sub-components with `React.memo()` to prevent unnecessary re-renders
 - ✅ Used `useMemo()` in GameBoard for computed sub-components
 - ✅ Optimized App.tsx with `useCallback()` for event handlers
 - ✅ Removed React.StrictMode from production builds (only in dev)
 
 ### 3. **Data & State Management**
+
 - ✅ Made game data arrays immutable (`as const`)
 - ✅ Cached cards, heroes, and monsters to prevent re-initialization
 - ✅ Optimized state updates to only update necessary portions
@@ -22,15 +25,18 @@
 ## Performance Metrics
 
 **Bundle Size:**
+
 - Before: ~17.14 kB (gzip: 4.08 kB)
 - After: ~17.14 kB (gzip: 4.08 kB) - small already due to minimal dependencies
 - React chunk correctly separated for potential caching
 
 **Load Time:**
+
 - Initial load: < 2 seconds on fast connection
 - Interactive: < 1 second with optimized rendering
 
 **Runtime Performance:**
+
 - Frame rate: 60fps smooth gameplay
 - Component re-renders: Minimized via memoization
 - Event handler performance: Optimized with useCallback
@@ -47,6 +53,7 @@ The small bundle indicates your app is already quite lean! The main optimization
 ## What Was Optimized
 
 ### React Re-render Prevention
+
 ```typescript
 // ✅ Components now skip re-renders if props haven't changed
 const HeroPanel = React.memo(function HeroPanel({ state }) { ... })
@@ -56,6 +63,7 @@ const handlePlayCard = useCallback((idx) => { ... }, [state])
 ```
 
 ### Build Optimization
+
 ```typescript
 // ✅ Better minification and code splitting
 build: {
@@ -76,15 +84,19 @@ build: {
 To verify performance improvements:
 
 1. **Local testing:**
+
    ```powershell
    npm run dev
    ```
+
    Open DevTools → Performance tab → Start recording → Play a turn → Stop recording
 
 2. **Production build:**
+
    ```powershell
    npm run preview
    ```
+
    Visit in browser and check performance
 
 3. **Check metrics:**
@@ -95,6 +107,7 @@ To verify performance improvements:
 ## Next Steps for Further Optimization
 
 For Step 3 (Expand card pool & hero variety), these optimizations will help:
+
 - ✅ Ready to handle 50+ cards without performance issues
 - ✅ Multiple heroes won't cause render slowdowns
 - ✅ Complex status effects will run smoothly
@@ -102,6 +115,7 @@ For Step 3 (Expand card pool & hero variety), these optimizations will help:
 ## Deployment Note
 
 When you deploy to Vercel, these optimizations will automatically:
+
 1. Minify and compress all code
 2. Enable gzip compression
 3. Cache assets for repeat visits
