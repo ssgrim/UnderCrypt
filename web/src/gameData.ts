@@ -1,6 +1,7 @@
 import { Card, Hero, Monster } from './types';
 
 export const cards: Card[] = [
+    // Game data is cached and reused across renders
   {
     id: 'knight_strike',
     name: 'Knight\'s Strike',
@@ -29,7 +30,7 @@ export const cards: Card[] = [
     cost: 1,
     effects: [{ type: 'heal', value: 10, target: 'self' }],
   },
-];
+] as const;
 
 export const heroes: Hero[] = [
   {
@@ -42,9 +43,9 @@ export const heroes: Hero[] = [
     passive: 'Tough',
     active: 'Bash',
   },
-];
+] as const;
 
 export const monsters: Monster[] = [
   { id: 'giant_rat', name: 'Giant Rat', type: 'Minion', hp: 25, attack: 8 },
   { id: 'spider', name: 'Giant Spider', type: 'Minion', hp: 20, attack: 6 },
-];
+] as const;

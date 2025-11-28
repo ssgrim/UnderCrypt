@@ -9,14 +9,20 @@ interface Props {
 }
 
 export function GameBoard({ state, onPlayCard, onEndTurn }: Props) {
+  const [targetIdx, setTargetIdx] = React.useState(0);
+
+  const memoizedHeroPanel = React.useMemo(() => <HeroPanel state={state} />, [state.hero.hp, state.hero.block, state.energy]);
+  const memoizedEnemyPanel = React.useMemo(() => <EnemyPanel state={state} onSelectTarget={setTargetIdx} />, [state.enemies]);
+  const memoizedHandPanel = React.useMemo(() => <HandPanel state={state} onPlayCard={onPlayCard} />, [state.hand, state.energy]);
+
   return (
     <div className="game-board">
       <div className="top-section">
-        <HeroPanel state={state} />
-        <EnemyPanel state={state} onSelectTarget={(idx) => setTargetIdx(idx)} />
+        {memoizedHeroPanel}
+        {memoizedEnemyPanel}
       </div>
       <div className="bottom-section">
-        <HandPanel state={state} onPlayCard={onPlayCard} />
+        {memoizedHandPanel}
         <button className="end-turn-btn" onClick={onEndTurn}>
           End Turn
         </button>
@@ -29,7 +35,7 @@ const setTargetIdx = (idx: number) => {
   // Will be managed by parent App component
 };
 
-function HeroPanel({ state }: { state: GameState }) {
+const HeroPanel = React.memo(function HeroPanel({ state }: { state: GameState }) {
   const ratio = state.hero.hp / state.hero.baseHP;
   const color = ratio > 0.5 ? '#4a9' : ratio > 0.2 ? '#fa4' : '#f44';
 
@@ -53,9 +59,9 @@ function HeroPanel({ state }: { state: GameState }) {
       </div>
     </div>
   );
-}
+});
 
-function EnemyPanel({ state, onSelectTarget }: { state: GameState; onSelectTarget: (idx: number) => void }) {
+const EnemyPanel = React.memo(function EnemyPanel({ state, onSelectTarget }: { state: GameState; onSelectTarget: (idx: number) => void }) {
   return (
     <div className="enemy-panel">
       <h2>Enemies ({state.enemies.filter((e) => e.hp > 0).length})</h2>
@@ -70,9 +76,9 @@ function EnemyPanel({ state, onSelectTarget }: { state: GameState; onSelectTarge
       </div>
     </div>
   );
-}
+});
 
-function HandPanel({
+const HandPanel = React.memo(function HandPanel({
   state,
   onPlayCard,
 }: {
@@ -95,9 +101,9 @@ function HandPanel({
       </div>
     </div>
   );
-}
+});
 
-function CardButton({
+const CardButton = React.memo(function CardButton({
   card,
   index,
   canPlay,
@@ -121,4 +127,4 @@ function CardButton({
       </div>
     </button>
   );
-}
+});

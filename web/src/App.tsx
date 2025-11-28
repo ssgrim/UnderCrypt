@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useCallback } from 'react';
 import { GameState } from './types';
 import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle } from './gameEngine';
 import { cards, heroes, monsters } from './gameData';
@@ -11,16 +12,16 @@ export function App() {
   const [message, setMessage] = useState('');
   const [targetIdx, setTargetIdx] = useState(0);
 
-  const handleStart = () => {
+  const handleStart = useCallback(() => {
     const data = loadGameData(cards, heroes, monsters);
     const newState = startGame(data, 'knight_of_ashes');
     newState.enemies = [{ ...shuffle(monsters.slice(0, 2))[0] }];
     setState(newState);
     setGameOver(false);
     setMessage('');
-  };
+  }, []);
 
-  const handlePlayCard = (handIndex: number, target: number) => {
+  const handlePlayCard = useCallback((handIndex: number, target: number) => {
     if (!state) return;
     try {
       playCard(state, handIndex, target);
@@ -29,9 +30,9 @@ export function App() {
     } catch (e: any) {
       setMessage(e.message);
     }
-  };
+  }, [state]);
 
-  const handleEndTurn = () => {
+  const handleEndTurn = useCallback(() => {
     if (!state) return;
 
     // Remove dead enemies
@@ -56,7 +57,7 @@ export function App() {
     // Start new turn
     startTurn(state);
     setState({ ...state });
-  };
+  }, [state]);
 
   return (
     <div className="app">
