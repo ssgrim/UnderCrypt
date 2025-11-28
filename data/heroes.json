@@ -9,4 +9,15 @@
     "passive": "Tough",
     "active": "Bash"
   }
+  ,
+  {
+    "id": "adept_of_embers",
+    "name": "Adept of Embers",
+    "class": "Mage",
+    "baseHP": 60,
+    "handSize": 5,
+    "startingDeck": ["flame_burst", "quick_slash", "defend", "heal_potion", "quick_slash"],
+    "passive": "Pyromancer",
+    "active": "Fireball"
+  }
 ]

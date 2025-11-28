@@ -2,6 +2,7 @@ export type Effect =
   | { type: 'damage'; value: number; target: 'enemy' | 'all_enemies' }
   | { type: 'block'; value: number; target: 'self' }
   | { type: 'heal'; value: number; target: 'self' };
+  | { type: 'status'; name: string; value: number; target: 'enemy' | 'self' };
 
 export interface Card {
   id: string;
@@ -30,6 +31,7 @@ export interface Monster {
   type: 'Minion' | 'Elite' | 'Boss';
   hp: number;
   attack: number;
+  status?: Record<string, number>;
 }
 
 export interface GameState {
@@ -39,4 +41,5 @@ export interface GameState {
   discard: Card[];
   enemies: Monster[];
   energy: number;
+  maxEnergy?: number;
 }

@@ -63,6 +63,20 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
   state.energy -= card.cost;
 
   for (const eff of card.effects) {
+    if ((eff as any).type === 'status') {
+      const s = eff as any;
+      if (s.target === 'enemy') {
+        const m = state.enemies[targetIndex];
+        if (m) {
+          m.status = m.status || {};
+          m.status[s.name] = (m.status[s.name] || 0) + s.value;
+        }
+      } else if (s.target === 'self') {
+        (state.hero as any).status = (state.hero as any).status || {};
+        (state.hero as any).status[s.name] = ((state.hero as any).status[s.name] || 0) + s.value;
+      }
+      continue;
+    }
     if (eff.type === 'damage') {
       if (state.enemies[targetIndex]) {
         state.enemies[targetIndex].hp -= eff.value;
@@ -83,11 +97,35 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
 export function enemyTurn(state: GameState) {
   for (const m of state.enemies) {
     if (m.hp <= 0) continue;
+    if (m.status && (m.status['frozen'] || 0) > 0) {
+      m.status['frozen'] = Math.max(0, (m.status['frozen'] || 0) - 1);
+      continue;
+    }
     const dmg = Math.max(0, m.attack - state.hero.block);
     state.hero.hp -= dmg;
   }
 }
 
 export function processStatusEffects(state: GameState) {
-  // placeholder
+  for (const m of state.enemies) {
+    if (!m.status) continue;
+    if (m.status['poison'] && m.status['poison'] > 0) {
+      m.hp -= m.status['poison'];
+      m.status['poison'] = Math.max(0, m.status['poison'] - 1);
+    }
+    for (const k of Object.keys(m.status)) {
+      if ((m.status as any)[k] === 0) delete (m.status as any)[k];
+    }
+  }
+
+  const hStatus = (state.hero as any).status;
+  if (hStatus) {
+    if (hStatus['poison'] && hStatus['poison'] > 0) {
+      state.hero.hp -= hStatus['poison'];
+      hStatus['poison'] = Math.max(0, hStatus['poison'] - 1);
+    }
+    for (const k of Object.keys(hStatus)) {
+      if ((hStatus as any)[k] === 0) delete (hStatus as any)[k];
+    }
+  }
 }

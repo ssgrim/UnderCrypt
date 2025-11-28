@@ -1,3 +1,5 @@
 [
-  { "id": "giant_rat", "name": "Giant Rat", "type": "Minion", "hp": 25, "attack": 8 }
+  { "id": "giant_rat", "name": "Giant Rat", "type": "Minion", "hp": 25, "attack": 8 },
+  { "id": "skeleton_warrior", "name": "Skeleton Warrior", "type": "Minion", "hp": 30, "attack": 10 },
+  { "id": "orc_brute", "name": "Orc Brute", "type": "Elite", "hp": 45, "attack": 14 }
 ]

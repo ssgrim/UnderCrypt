@@ -20,4 +20,33 @@
     "cost": 2,
     "effects": [{ "type": "damage", "value": 8, "target": "all_enemies" }]
   }
+  ,
+  {
+    "id": "heavy_strike",
+    "name": "Heavy Strike",
+    "type": "Attack",
+    "cost": 2,
+    "effects": [{ "type": "damage", "value": 12, "target": "enemy" }]
+  },
+  {
+    "id": "quick_slash",
+    "name": "Quick Slash",
+    "type": "Attack",
+    "cost": 1,
+    "effects": [{ "type": "damage", "value": 4, "target": "enemy" }]
+  },
+  {
+    "id": "poison_dagger",
+    "name": "Poison Dagger",
+    "type": "Attack",
+    "cost": 1,
+    "effects": [{ "type": "damage", "value": 3, "target": "enemy" }, { "type": "status", "name": "poison", "value": 2, "target": "enemy" }]
+  },
+  {
+    "id": "shield_wall",
+    "name": "Shield Wall",
+    "type": "Defense",
+    "cost": 2,
+    "effects": [{ "type": "block", "value": 12, "target": "self" }]
+  }
 ]

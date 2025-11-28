@@ -71,6 +71,13 @@ const EnemyPanel = React.memo(function EnemyPanel({ state, onSelectTarget }: { s
             <div className="name">{e.name}</div>
             <div className="hp">HP: {e.hp}</div>
             <div className="attack">ATK: {e.attack}</div>
+            {e.status && Object.keys(e.status).length > 0 && (
+              <div className="statuses">
+                {Object.entries(e.status).map(([k, v]) => (
+                  <span key={k} className="status-pill">{k}: {v}</span>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </div>

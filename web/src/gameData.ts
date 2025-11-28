@@ -30,6 +30,34 @@ export const cards: Card[] = [
     cost: 1,
     effects: [{ type: 'heal', value: 10, target: 'self' }],
   },
+  {
+    id: 'heavy_strike',
+    name: 'Heavy Strike',
+    type: 'Attack',
+    cost: 2,
+    effects: [{ type: 'damage', value: 12, target: 'enemy' }],
+  },
+  {
+    id: 'quick_slash',
+    name: 'Quick Slash',
+    type: 'Attack',
+    cost: 1,
+    effects: [{ type: 'damage', value: 4, target: 'enemy' }],
+  },
+  {
+    id: 'poison_dagger',
+    name: 'Poison Dagger',
+    type: 'Attack',
+    cost: 1,
+    effects: [{ type: 'damage', value: 3, target: 'enemy' }, { type: 'status', name: 'poison', value: 2, target: 'enemy' }],
+  },
+  {
+    id: 'shield_wall',
+    name: 'Shield Wall',
+    type: 'Defense',
+    cost: 2,
+    effects: [{ type: 'block', value: 12, target: 'self' }],
+  }
 ] as const;
 
 export const heroes: Hero[] = [
@@ -43,9 +71,20 @@ export const heroes: Hero[] = [
     passive: 'Tough',
     active: 'Bash',
   },
+  {
+    id: 'adept_of_embers',
+    name: 'Adept of Embers',
+    class: 'Mage',
+    baseHP: 60,
+    handSize: 5,
+    startingDeck: ['flame_burst', 'quick_slash', 'defend', 'heal_potion', 'quick_slash'],
+    passive: 'Pyromancer',
+    active: 'Fireball',
+  },
 ] as const;
 
 export const monsters: Monster[] = [
   { id: 'giant_rat', name: 'Giant Rat', type: 'Minion', hp: 25, attack: 8 },
-  { id: 'spider', name: 'Giant Spider', type: 'Minion', hp: 20, attack: 6 },
+  { id: 'skeleton_warrior', name: 'Skeleton Warrior', type: 'Minion', hp: 30, attack: 10 },
+  { id: 'orc_brute', name: 'Orc Brute', type: 'Elite', hp: 45, attack: 14 },
 ] as const;
