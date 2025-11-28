@@ -1,0 +1,23 @@
+[
+  {
+    "id": "knight_strike",
+    "name": "Knight's Strike",
+    "type": "Attack",
+    "cost": 1,
+    "effects": [{ "type": "damage", "value": 6, "target": "enemy" }]
+  },
+  {
+    "id": "defend",
+    "name": "Defend",
+    "type": "Defense",
+    "cost": 1,
+    "effects": [{ "type": "block", "value": 5, "target": "self" }]
+  },
+  {
+    "id": "flame_burst",
+    "name": "Flame Burst",
+    "type": "Spell",
+    "cost": 2,
+    "effects": [{ "type": "damage", "value": 8, "target": "all_enemies" }]
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "powershell.codeFormatting.preset": "OTBS",
+    "powershell.linting.enabled": true,
+    "[powershell]": {
+      "editor.defaultFormatter": "ms-vscode.powershell",
+      "editor.formatOnSave": true
+    }
+  }
+}

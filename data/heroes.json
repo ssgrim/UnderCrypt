@@ -1,0 +1,12 @@
+[
+  {
+    "id": "knight_of_ashes",
+    "name": "Knight of Ashes",
+    "class": "Warrior",
+    "baseHP": 80,
+    "handSize": 5,
+    "startingDeck": ["knight_strike", "defend", "defend", "knight_strike", "defend"],
+    "passive": "Tough",
+    "active": "Bash"
+  }
+]
