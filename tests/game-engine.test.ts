@@ -21,6 +21,8 @@ describe('game engine basic', () => {
   it('drawToHandSize fills to hand size when deck available', () => {
     const data = loadGameData(cards, heroes, monsters);
     const state = startGame(data, 'knight_of_ashes');
+    // Move all cards from hand and deck to deck to simulate a fresh state
+    state.deck = [...state.hand, ...state.deck];
     state.hand = [];
     drawToHandSize(state);
     expect(state.hand.length).toBeGreaterThan(0);

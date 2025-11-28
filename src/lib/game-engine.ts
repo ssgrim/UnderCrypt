@@ -43,7 +43,8 @@ export function drawToHandSize(state: GameState) {
   while (state.hand.length < state.hero.handSize) {
     if (state.deck.length === 0) {
       // reshuffle discard
-      state.deck = shuffle(state.discard.splice(0));
+      if (state.discard.length === 0) break;
+      state.deck = shuffle(state.discard.splice(0, state.discard.length));
     }
     const card = state.deck.shift();
     if (!card) break;
