@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import './GameOptions.css';
 
 interface GameSettings {
@@ -52,7 +53,7 @@ export function GameOptions({ settings, onSettingsChange, onClose }: Props) {
     }
   };
 
-  return (
+  const modal = (
     <div className="game-options-overlay" onClick={onClose}>
       <div className="game-options-modal" onClick={(e) => e.stopPropagation()}>
         <div className="options-header">
@@ -164,4 +165,6 @@ export function GameOptions({ settings, onSettingsChange, onClose }: Props) {
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }
