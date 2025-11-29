@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useCallback } from "react";
 import { GameState } from "./types";
-import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle } from "./gameEngine";
+import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle, awardEnemyXP } from "./gameEngine";
 import { cards, heroes, monsters } from "./gameData";
 import { GameBoard } from "./components/GameBoard";
 import { GameOptions } from "./components/GameOptions";
 import { HeroSelection } from "./components/HeroSelection";
+import { LevelUpPanel } from "./components/LevelUpPanel";
 import "./App.css";
 import { playCardPlay, playDamage, playBlock, playHeal, playVictory, playDefeat, startBackgroundMusic, stopBackgroundMusic, setMusicVolume } from "./audio";
 
@@ -26,6 +27,7 @@ export function App() {
   const [targetIdx, setTargetIdx] = useState(0);
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [selectedHeroId, setSelectedHeroId] = useState<string | null>(null);
+  const [showLevelUp, setShowLevelUp] = useState(false);
   const [settings, setSettings] = useState<GameSettings>(() => {
     const saved = localStorage.getItem("underCryptSettings");
     return saved ? JSON.parse(saved) : {
@@ -52,8 +54,11 @@ export function App() {
     newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
     newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
 
-    newState.enemies = [{ ...shuffle(monsters.slice(0, 2))[0] }];
-    newState.enemies[0].damage = Math.floor(newState.enemies[0].damage * mult.enemyDamage);
+    // Select random enemy and scale to hero level
+    const selectedEnemy = shuffle(monsters.slice(0, 2))[0];
+    const scaledEnemy = scaleEnemyStats(selectedEnemy, newState.hero.level);
+    scaledEnemy.attack = Math.floor(scaledEnemy.attack * mult.enemyDamage);
+    newState.enemies = [scaledEnemy];
 
     setState(newState);
     setGameOver(false);
@@ -67,27 +72,6 @@ export function App() {
       handleSelectHero(selectedHeroId);
     }
   }, [selectedHeroId, handleSelectHero]);
-
-    // Apply difficulty multipliers
-    const difficultyMultipliers: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
-      easy: { heroHp: 1.2, enemyDamage: 0.8 },
-      normal: { heroHp: 1, enemyDamage: 1 },
-      hard: { heroHp: 0.8, enemyDamage: 1.2 },
-    };
-
-    const mult = difficultyMultipliers[settings.difficulty];
-    newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
-    newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
-
-    newState.enemies = [{ ...shuffle(monsters.slice(0, 2))[0] }];
-    newState.enemies[0].damage = Math.floor(newState.enemies[0].damage * mult.enemyDamage);
-
-    setState(newState);
-    setGameOver(false);
-    setMessage("");
-    startBackgroundMusic();
-    setMusicVolume(settings.musicVolume);
-  }, [settings.difficulty, settings.musicVolume]);
 
   const handlePlayCard = useCallback((handIndex: number, target: number) => {
     if (!state) return;
@@ -115,6 +99,19 @@ export function App() {
     state.enemies = state.enemies.filter((e) => e.hp > 0);
 
     if (state.enemies.length === 0) {
+      // Award XP for defeated enemy and check for level-up
+      if (state.enemies.length === 0 && !showLevelUp) {
+        const defeatedEnemy = state.enemies[0];
+        const leveledUp = awardEnemyXP(state, defeatedEnemy);
+        
+        if (leveledUp) {
+          setShowLevelUp(true);
+          setState({ ...state });
+          if (settings.soundEnabled) playVictory();
+          return;
+        }
+      }
+      
       setGameOver(true);
       setMessage("Victory! All enemies defeated.");
       if (settings.soundEnabled) playVictory();
@@ -135,7 +132,7 @@ export function App() {
 
     startTurn(state);
     setState({ ...state });
-  }, [state, settings.soundEnabled]);
+  }, [state, settings.soundEnabled, showLevelUp]);
 
   return (
     <div className="app">
@@ -175,6 +172,21 @@ export function App() {
         <div className="game-container">
           <GameBoard state={state} onPlayCard={handlePlayCard} onEndTurn={handleEndTurn} />
           {message && <div className="message">{message}</div>}
+          {showLevelUp && state && (
+            <LevelUpPanel
+              level={state.hero.level}
+              xp={state.hero.xp}
+              maxXp={state.hero.maxXp}
+              baseHP={state.hero.baseHP}
+              maxEnergy={state.maxEnergy}
+              onClose={() => {
+                setShowLevelUp(false);
+                setGameOver(true);
+                setMessage("Victory! All enemies defeated.");
+                stopBackgroundMusic();
+              }}
+            />
+          )}
           {gameOver && (
             <div className="game-over">
               <div className="modal">
@@ -183,6 +195,7 @@ export function App() {
                   setSelectedHeroId(null);
                   setState(null);
                   setGameOver(false);
+                  setShowLevelUp(false);
                 }}>
                   Choose Another Hero
                 </button>

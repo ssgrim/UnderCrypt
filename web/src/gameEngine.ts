@@ -13,6 +13,28 @@ export function loadGameData(cards: Card[], heroes: Hero[], monsters: Monster[])
   return { cards, heroes, monsters };
 }
 
+export function scaleEnemyStats(enemy: Monster, heroLevel: number): Monster {
+  // Scale difficulty multiplier based on hero level (2% per level)
+  const levelMultiplier = 1 + (heroLevel - 1) * 0.02;
+  
+  // Type-based multiplier for additional scaling
+  const typeMultipliers: Record<'Minion' | 'Elite' | 'Boss', number> = {
+    'Minion': 1.0,
+    'Elite': 1.3,
+    'Boss': 1.6,
+  };
+  
+  const totalMultiplier = levelMultiplier * typeMultipliers[enemy.type];
+  
+  return {
+    ...enemy,
+    level: heroLevel,
+    baseHP: enemy.hp,
+    hp: Math.floor(enemy.hp * totalMultiplier),
+    attack: Math.floor(enemy.attack * levelMultiplier),
+  };
+}
+
 export function startGame(data: ReturnType<typeof loadGameData>, heroId: string) {
   const hero = data.heroes.find((h) => h.id === heroId);
   if (!hero) throw new Error('Hero not found: ' + heroId);
@@ -26,13 +48,14 @@ export function startGame(data: ReturnType<typeof loadGameData>, heroId: string)
   const shuffled = shuffle(deck);
 
   const state: GameState = {
-    hero: { ...hero, hp: hero.baseHP, block: 0 },
+    hero: { ...hero, hp: hero.baseHP, block: 0, level: 1, xp: 0, maxXp: 100 },
     deck: shuffled,
     hand: [],
     discard: [],
     enemies: [],
     energy: 3,
     maxEnergy: 3,
+    enemiesDefeated: 0,
   };
 
   drawToHandSize(state);
@@ -161,4 +184,37 @@ export function processStatusEffects(state: GameState) {
       if ((hStatus as any)[k] === 0) delete (hStatus as any)[k];
     }
   }
+}
+
+export function gainXP(state: GameState, amount: number): boolean {
+  state.hero.xp += amount;
+  let leveledUp = false;
+  
+  while (state.hero.xp >= state.hero.maxXp && state.hero.level < 10) {
+    state.hero.xp -= state.hero.maxXp;
+    state.hero.level += 1;
+    leveledUp = true;
+    
+    // Level up stat increases
+    state.hero.baseHP = Math.floor(state.hero.baseHP * 1.1); // +10% HP
+    state.hero.hp = Math.min(state.hero.hp + Math.floor(state.hero.baseHP * 0.1), state.hero.baseHP);
+    state.maxEnergy = Math.min(state.maxEnergy + 1, 8); // Cap at 8
+    
+    // XP requirement increases per level
+    state.hero.maxXp = Math.floor(100 * (1.2 ** state.hero.level));
+  }
+  
+  return leveledUp;
+}
+
+export function awardEnemyXP(state: GameState, enemy: Monster) {
+  // Award XP based on enemy type
+  const xpRewards: Record<string, number> = {
+    'Minion': 25,
+    'Elite': 50,
+    'Boss': 100,
+  };
+  
+  const xp = xpRewards[enemy.type] || 25;
+  return gainXP(state, xp);
 }

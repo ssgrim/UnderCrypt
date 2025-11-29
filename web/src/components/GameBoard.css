@@ -22,9 +22,26 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.hero-panel h2 {
+.hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
+}
+
+.hero-panel h2 {
+  margin: 0;
   color: #fff;
+}
+
+.level-badge {
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 12px;
+  box-shadow: 0 0 10px rgba(74, 170, 153, 0.4);
 }
 
 .stats {
@@ -56,6 +73,22 @@
 
 .hp-fill {
   height: 100%;
+  transition: width 0.3s ease;
+}
+
+.xp-bar {
+  flex: 1;
+  height: 8px;
+  background: #222;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #444;
+  margin: 0 10px;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4a9 0%, #2a7 100%);
   transition: width 0.3s ease;
 }
 
@@ -107,6 +140,30 @@
   font-weight: bold;
   color: #fff;
   margin-bottom: 5px;
+}
+
+.enemy-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.enemy-level {
+  background: linear-gradient(135deg, #f44, #fa4);
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.enemy-type {
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 5px;
+  font-style: italic;
 }
 
 .enemy .hp {

@@ -39,10 +39,14 @@ const setTargetIdx = (idx: number) => {
 const HeroPanel = React.memo(function HeroPanel({ state }: { state: GameState }) {
   const ratio = state.hero.hp / state.hero.baseHP;
   const color = ratio > 0.5 ? '#4a9' : ratio > 0.2 ? '#fa4' : '#f44';
+  const xpRatio = state.hero.xp / state.hero.maxXp;
 
   return (
     <div className="hero-panel">
-      <h2>{state.hero.name}</h2>
+      <div className="hero-header">
+        <h2>{state.hero.name}</h2>
+        <div className="level-badge">Lvl {state.hero.level}</div>
+      </div>
       <div className="stats">
         <div className="stat">
           <span>HP:</span>
@@ -57,6 +61,13 @@ const HeroPanel = React.memo(function HeroPanel({ state }: { state: GameState })
         <div className="stat">
           <span>Energy:</span> <strong>{state.energy}/{state.maxEnergy}</strong>
         </div>
+        <div className="stat">
+          <span>XP:</span>
+          <div className="xp-bar">
+            <div className="xp-fill" style={{ width: `${xpRatio * 100}%` }} />
+          </div>
+          <span>{state.hero.xp}/{state.hero.maxXp}</span>
+        </div>
       </div>
     </div>
   );
@@ -69,7 +80,11 @@ const EnemyPanel = React.memo(function EnemyPanel({ state, onSelectTarget }: { s
       <div className="enemies">
         {state.enemies.map((e, i) => (
           <div key={i} className={`enemy ${e.hp <= 0 ? 'defeated' : ''}`} onClick={() => onSelectTarget(i)}>
-            <div className="name">{e.name}</div>
+            <div className="enemy-header">
+              <div className="name">{e.name}</div>
+              {e.level && <div className="enemy-level">Lvl {e.level}</div>}
+            </div>
+            <div className="enemy-type">{e.type}</div>
             <div className="hp">HP: {e.hp}</div>
             <div className="attack">ATK: {e.attack}</div>
             {e.status && Object.keys(e.status).length > 0 && (

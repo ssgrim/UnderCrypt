@@ -32,17 +32,20 @@ export interface Monster {
   type: 'Minion' | 'Elite' | 'Boss';
   hp: number;
   attack: number;
+  level?: number;
+  baseHP?: number;
   status?: Record<string, number>;
 }
 
 export interface GameState {
-  hero: Hero & { hp: number; block: number };
+  hero: Hero & { hp: number; block: number; level: number; xp: number; maxXp: number };
   deck: Card[];
   hand: Card[];
   discard: Card[];
   enemies: Monster[];
   energy: number;
   maxEnergy: number;
+  enemiesDefeated: number;
   // hero may have statuses at runtime
   // hero.status can be accessed as (state.hero as any).status
 }
