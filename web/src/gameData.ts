@@ -23,7 +23,7 @@ export const cards: Card[] = [
     cost: 2,
     effects: [{ type: 'damage', value: 12, target: 'enemy' }],
   },
-  
+
   // DEFENSIVE CARDS
   {
     id: 'defend',
@@ -46,7 +46,7 @@ export const cards: Card[] = [
     cost: 1,
     effects: [{ type: 'block', value: 8, target: 'self' }],
   },
-  
+
   // SPELL CARDS WITH SPECIAL EFFECTS
   {
     id: 'flame_burst',
@@ -69,7 +69,7 @@ export const cards: Card[] = [
     cost: 1,
     effects: [{ type: 'damage', value: 5, target: 'enemy' }],
   },
-  
+
   // POISON & STATUS EFFECTS
   {
     id: 'poison_dagger',
@@ -85,7 +85,7 @@ export const cards: Card[] = [
     cost: 2,
     effects: [{ type: 'damage', value: 5, target: 'enemy' }, { type: 'status', name: 'poison', value: 3, target: 'enemy' }],
   },
-  
+
   // HEALING & UTILITY
   {
     id: 'heal_potion',
@@ -108,7 +108,7 @@ export const cards: Card[] = [
     cost: 1,
     effects: [{ type: 'heal', value: 5, target: 'self' }, { type: 'damage', value: 4, target: 'all_enemies' }],
   },
-  
+
   // COMBO & DRAW CARDS
   {
     id: 'second_wind',

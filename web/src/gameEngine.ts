@@ -16,16 +16,16 @@ export function loadGameData(cards: Card[], heroes: Hero[], monsters: Monster[])
 export function scaleEnemyStats(enemy: Monster, heroLevel: number): Monster {
   // Scale difficulty multiplier based on hero level (2% per level)
   const levelMultiplier = 1 + (heroLevel - 1) * 0.02;
-  
+
   // Type-based multiplier for additional scaling
   const typeMultipliers: Record<'Minion' | 'Elite' | 'Boss', number> = {
     'Minion': 1.0,
     'Elite': 1.3,
     'Boss': 1.6,
   };
-  
+
   const totalMultiplier = levelMultiplier * typeMultipliers[enemy.type];
-  
+
   return {
     ...enemy,
     level: heroLevel,
@@ -132,7 +132,7 @@ export function enemyTurn(state: GameState) {
       m.status['frozen'] = Math.max(0, (m.status['frozen'] || 0) - 1);
       continue;
     }
-    
+
     // Calculate damage, reduced by chill
     let dmg = m.attack;
     if (m.status && (m.status['chill'] || 0) > 0) {
@@ -146,24 +146,24 @@ export function enemyTurn(state: GameState) {
 export function processStatusEffects(state: GameState) {
   for (const m of state.enemies) {
     if (!m.status) continue;
-    
+
     // Poison damage
     if (m.status['poison'] && m.status['poison'] > 0) {
       m.hp -= m.status['poison'];
       m.status['poison'] = Math.max(0, m.status['poison'] - 1);
     }
-    
+
     // Burn damage (similar to poison)
     if (m.status['burn'] && m.status['burn'] > 0) {
       m.hp -= m.status['burn'] * 2;
       m.status['burn'] = Math.max(0, m.status['burn'] - 1);
     }
-    
+
     // Chill reduces attack power (handled in enemyTurn)
     if (m.status['chill'] && m.status['chill'] > 0) {
       m.status['chill'] = Math.max(0, m.status['chill'] - 1);
     }
-    
+
     // Clean up expired statuses
     for (const k of Object.keys(m.status)) {
       if ((m.status as any)[k] === 0) delete (m.status as any)[k];
@@ -189,21 +189,21 @@ export function processStatusEffects(state: GameState) {
 export function gainXP(state: GameState, amount: number): boolean {
   state.hero.xp += amount;
   let leveledUp = false;
-  
+
   while (state.hero.xp >= state.hero.maxXp && state.hero.level < 10) {
     state.hero.xp -= state.hero.maxXp;
     state.hero.level += 1;
     leveledUp = true;
-    
+
     // Level up stat increases
     state.hero.baseHP = Math.floor(state.hero.baseHP * 1.1); // +10% HP
     state.hero.hp = Math.min(state.hero.hp + Math.floor(state.hero.baseHP * 0.1), state.hero.baseHP);
     state.maxEnergy = Math.min(state.maxEnergy + 1, 8); // Cap at 8
-    
+
     // XP requirement increases per level
     state.hero.maxXp = Math.floor(100 * (1.2 ** state.hero.level));
   }
-  
+
   return leveledUp;
 }
 
@@ -214,7 +214,7 @@ export function awardEnemyXP(state: GameState, enemy: Monster) {
     'Elite': 50,
     'Boss': 100,
   };
-  
+
   const xp = xpRewards[enemy.type] || 25;
   return gainXP(state, xp);
 }

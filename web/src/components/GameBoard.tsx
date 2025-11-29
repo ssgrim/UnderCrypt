@@ -138,7 +138,7 @@ const CardButton = React.memo(function CardButton({
   onPlay: () => void;
 }) {
   const [showTooltip, setShowTooltip] = React.useState(false);
-  
+
   return (
     <div className="card-button-wrapper" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
       <button className={`card-btn ${card.type.toLowerCase()} ${!canPlay ? 'disabled' : ''}`} onClick={onPlay} disabled={!canPlay}>

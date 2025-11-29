@@ -18,7 +18,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
+  background:
     radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 70%, rgba(74, 144, 226, 0.08) 0%, transparent 50%),
     radial-gradient(ellipse at 50% 50%, rgba(75, 0, 130, 0.03) 0%, transparent 70%);

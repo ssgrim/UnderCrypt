@@ -16,7 +16,7 @@ export function useParticleEffect() {
   const addParticle = (x: number, y: number, type: 'damage' | 'heal' | 'block' | 'xp', text: string) => {
     const id = nextId;
     setNextId(id + 1);
-    
+
     const particle: Particle = { id, x, y, type, text };
     setParticles((prev) => [...prev, particle]);
 

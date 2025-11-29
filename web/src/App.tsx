@@ -103,7 +103,7 @@ export function App() {
       if (state.enemies.length === 0 && !showLevelUp) {
         const defeatedEnemy = state.enemies[0];
         const leveledUp = awardEnemyXP(state, defeatedEnemy);
-        
+
         if (leveledUp) {
           setShowLevelUp(true);
           setState({ ...state });
@@ -111,7 +111,7 @@ export function App() {
           return;
         }
       }
-      
+
       setGameOver(true);
       setMessage("Victory! All enemies defeated.");
       if (settings.soundEnabled) playVictory();
