@@ -191,11 +191,31 @@ const CardButton = React.memo(function CardButton({
 }) {
   const [showTooltip, setShowTooltip] = React.useState(false);
 
+  const getEffectSummary = (effects: any[]) => {
+    return effects.map((e: any) => {
+      if (e.type === 'damage') {
+        const target = e.target === 'all_enemies' ? ' (All)' : e.target === 'self' ? ' (Self)' : '';
+        return `${e.value} DMG${target}`;
+      }
+      if (e.type === 'block') return `${e.value} Block`;
+      if (e.type === 'heal') return `${e.value} Heal`;
+      if (e.type === 'draw') return `Draw ${e.value}`;
+      if (e.type === 'poison') return `${e.value} Poison`;
+      if (e.type === 'freeze') return `Freeze ${e.value}`;
+      if (e.type === 'status') return `${e.name} ${e.value}`;
+      if (e.type === 'energy') return `+${e.value} Energy`;
+      return `${e.type} ${e.value}`;
+    }).join(' • ');
+  };
+
+  const effectText = getEffectSummary(card.effects);
+
   return (
     <div className="card-button-wrapper" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
       <button className={`card-btn ${card.type.toLowerCase()} ${!canPlay ? 'disabled' : ''}`} onClick={onPlay} disabled={!canPlay}>
         <div className="card-emoji">{getCardEmoji(card.id)}</div>
         <div className="card-name">{card.name}</div>
+        <div className="card-effects">{effectText}</div>
         <div className="card-cost">{card.cost}</div>
       </button>
       {showTooltip && (
