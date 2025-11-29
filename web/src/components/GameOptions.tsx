@@ -6,6 +6,7 @@ interface GameSettings {
   musicVolume: number;
   gameSpeed: 'slow' | 'normal' | 'fast';
   soundEnabled: boolean;
+  uiScale: 0.9 | 1 | 1.1 | 1.25 | 1.5;
 }
 
 interface Props {
@@ -110,6 +111,26 @@ export function GameOptions({ settings, onSettingsChange, onClose }: Props) {
                   onClick={() => handleSpeedChange(speed)}
                 >
                   {speed.charAt(0).toUpperCase() + speed.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* UI Scale */}
+          <div className="option-section">
+            <h3>UI Scale</h3>
+            <div className="speed-buttons">
+              {[0.9, 1, 1.1, 1.25, 1.5].map((scale) => (
+                <button
+                  key={scale}
+                  className={`speed-btn ${localSettings.uiScale === scale ? 'active' : ''}`}
+                  onClick={() => {
+                    const updated = { ...localSettings, uiScale: scale as any };
+                    setLocalSettings(updated);
+                    onSettingsChange(updated);
+                  }}
+                >
+                  {scale}×
                 </button>
               ))}
             </div>

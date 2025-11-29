@@ -1,3 +1,6 @@
+:root {
+  --ui-scale: 1;
+}
 .app {
   height: 100dvh;
   display: flex;
@@ -93,6 +96,10 @@
   flex-direction: column;
   overflow: auto;
   position: relative;
+  transform: scale(var(--ui-scale));
+  transform-origin: top left;
+  width: calc(100% / var(--ui-scale));
+  height: calc(100% / var(--ui-scale));
 }
 
 .start-screen {

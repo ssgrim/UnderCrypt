@@ -12,12 +12,14 @@ import { playCardPlay, playDamage, playBlock, playHeal, playVictory, playDefeat,
 
 type Difficulty = "easy" | "normal" | "hard";
 type GameSpeed = "slow" | "normal" | "fast";
+type UiScale = 0.9 | 1 | 1.1 | 1.25 | 1.5;
 
 interface GameSettings {
   difficulty: Difficulty;
   musicVolume: number;
   gameSpeed: GameSpeed;
   soundEnabled: boolean;
+  uiScale: UiScale;
 }
 
 export function App() {
@@ -30,12 +32,18 @@ export function App() {
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [settings, setSettings] = useState<GameSettings>(() => {
     const saved = localStorage.getItem("underCryptSettings");
-    return saved ? JSON.parse(saved) : {
+    const base = saved ? JSON.parse(saved) : {
       difficulty: "normal",
       musicVolume: 70,
       gameSpeed: "normal",
       soundEnabled: true,
+      uiScale: 1,
     };
+    // Ensure uiScale exists if loading from older storage
+    if (!('uiScale' in base)) base.uiScale = 1;
+    // Apply initial uiScale to document
+    document.documentElement.style.setProperty('--ui-scale', String(base.uiScale));
+    return base;
   });
 
   const handleSelectHero = useCallback((heroId: string) => {
@@ -68,6 +76,7 @@ export function App() {
       setMessage("");
       startBackgroundMusic();
       setMusicVolume(settings.musicVolume);
+      document.documentElement.style.setProperty('--ui-scale', String(settings.uiScale));
     } catch (e: any) {
       const err = e?.message || String(e);
       console.error('Failed to start game:', err);
@@ -227,6 +236,7 @@ export function App() {
             setSettings(newSettings);
             localStorage.setItem("underCryptSettings", JSON.stringify(newSettings));
             setMusicVolume(newSettings.musicVolume);
+            document.documentElement.style.setProperty('--ui-scale', String(newSettings.uiScale));
           }}
           onClose={() => setOptionsOpen(false)}
         />
