@@ -1,0 +1,19 @@
+.dungeon-map-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#0a0e27 0%,#1a1f3a 100%);display:flex;align-items:center;justify-content:center;z-index:5;overflow:auto;padding:20px}
+.dungeon-map{max-width:900px;width:100%;color:#ddd}
+.dungeon-map h2{margin:0 0 8px;font-size:clamp(24px,5vw,36px);color:#4a90e2;text-align:center;text-shadow:0 0 15px rgba(74,144,226,.5)}
+.map-hint{text-align:center;color:#aaa;margin-bottom:20px;font-size:clamp(13px,3.5vw,15px)}
+.rooms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.room-card{background:linear-gradient(135deg,rgba(26,31,58,.9) 0%,rgba(22,33,62,.9) 100%);border:2px solid rgba(74,144,226,.3);border-radius:10px;padding:16px;cursor:pointer;transition:.3s;text-align:center;color:#ddd;position:relative;overflow:hidden}
+.room-card:hover:not(:disabled){border-color:#4a90e2;box-shadow:0 0 20px rgba(74,144,226,.4);transform:translateY(-3px)}
+.room-card:disabled{opacity:.5;cursor:not-allowed}
+.room-card.completed{border-color:#4a9;background:linear-gradient(135deg,rgba(74,170,153,.15) 0%,rgba(74,170,153,.05) 100%)}
+.room-card.current{border-color:#f4a;box-shadow:0 0 25px rgba(255,170,170,.5)}
+.room-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid rgba(74,144,226,.2);padding-bottom:8px}
+.room-icon{font-size:24px}
+.room-type{font-size:12px;text-transform:uppercase;color:#4a90e2;font-weight:bold;letter-spacing:.5px}
+.room-preview{display:flex;flex-direction:column;gap:8px}
+.monster-name{font-weight:bold;font-size:16px;color:#fff}
+.monster-stats{display:flex;justify-content:center;gap:12px;font-size:13px;color:#aaa}
+.monster-type-badge{background:linear-gradient(135deg,#f44,#fa4);color:#000;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:bold;display:inline-block;margin-top:6px}
+.completed-badge{position:absolute;top:8px;right:8px;background:#4a9;color:#fff;padding:4px 8px;border-radius:8px;font-size:10px;font-weight:bold}
+@media(max-width:480px){.rooms-grid{grid-template-columns:1fr}.room-card{padding:12px}.monster-stats{font-size:12px;gap:8px}}

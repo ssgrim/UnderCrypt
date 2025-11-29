@@ -37,6 +37,24 @@ export interface Monster {
   status?: Record<string, number>;
 }
 
+export type RoomType = 'battle' | 'reward' | 'shop' | 'event' | 'boss';
+
+export interface DungeonRoom {
+  id: string;
+  type: RoomType;
+  completed: boolean;
+  monster?: Monster; // Preview info for battle/boss rooms
+}
+
+export interface RunState {
+  act: number;
+  floor: number;
+  gold: number;
+  rooms: DungeonRoom[];
+  currentRoomIndex: number | null;
+  relics?: string[];
+}
+
 export interface GameState {
   hero: Hero & { hp: number; block: number; level: number; xp: number; maxXp: number };
   deck: Card[];
@@ -48,6 +66,7 @@ export interface GameState {
   enemiesDefeated: number;
   roomIndex?: number;
   pendingReward?: Card[];
+  run?: RunState;
   // hero may have statuses at runtime
   // hero.status can be accessed as (state.hero as any).status
 }

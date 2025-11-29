@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useCallback } from "react";
-import { GameState } from "./types";
+import { GameState, DungeonRoom, RunState } from "./types";
 import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle, awardEnemyXP, scaleEnemyStats } from "./gameEngine";
 import { cards, heroes, monsters } from "./gameData";
+import { generateDungeonRooms } from "./dungeonHelpers";
 import { GameBoard } from "./components/GameBoard";
 import { GameOptions } from "./components/GameOptions";
 import { HeroSelection } from "./components/HeroSelection";
 import { LevelUpPanel } from "./components/LevelUpPanel";
 import { RewardPanel } from "./components/RewardPanel";
+import { DungeonMap } from "./components/DungeonMap";
 import "./App.css";
 import { playCardPlay, playDamage, playBlock, playHeal, playVictory, playDefeat, startBackgroundMusic, stopBackgroundMusic, setMusicVolume } from "./audio";
 
@@ -64,11 +66,20 @@ export function App() {
       newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
       newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
 
-      // Select random enemy and scale to hero level
-      const selectedEnemy = shuffle(monsters.slice(0, 2))[0];
-      const scaledEnemy = scaleEnemyStats(selectedEnemy, newState.hero.level);
-      scaledEnemy.attack = Math.floor(scaledEnemy.attack * mult.enemyDamage);
-      newState.enemies = [scaledEnemy];
+      // Generate dungeon rooms with monster previews
+      const rooms = generateDungeonRooms(monsters, newState.hero.level, 6);
+      
+      const runState: RunState = {
+        act: 1,
+        floor: 1,
+        gold: 0,
+        rooms,
+        currentRoomIndex: null, // No room entered yet
+        relics: [],
+      };
+
+      newState.run = runState;
+      newState.enemies = [];
 
       // Only set selected hero after successful initialization
       setSelectedHeroId(heroId);
@@ -196,46 +207,60 @@ export function App() {
         </div>
       ) : (
         <div className="game-container">
-          <GameBoard state={state} onPlayCard={handlePlayCard} onEndTurn={handleEndTurn} />
+          {state.run && state.run.currentRoomIndex === null && (
+            <DungeonMap
+              rooms={state.run.rooms}
+              currentRoomIndex={state.run.currentRoomIndex}
+              onSelectRoom={(index) => {
+                if (!state || !state.run) return;
+                const room = state.run.rooms[index];
+                state.run.currentRoomIndex = index;
+
+                if (room.type === 'battle' || room.type === 'boss') {
+                  const mults: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
+                    easy: { heroHp: 1.2, enemyDamage: 0.8 },
+                    normal: { heroHp: 1, enemyDamage: 1 },
+                    hard: { heroHp: 0.8, enemyDamage: 1.2 },
+                  };
+                  const mult = mults[settings.difficulty];
+                  const enemy = { ...room.monster! };
+                  enemy.attack = Math.floor(enemy.attack * mult.enemyDamage);
+                  state.enemies = [enemy];
+                  startTurn(state);
+                } else {
+                  // Shops/events: show a placeholder message for now
+                  setMessage(`Entered ${room.type} room (feature coming soon)`);
+                  room.completed = true;
+                  state.run.currentRoomIndex = null; // Return to map
+                }
+                setState({ ...state });
+              }}
+            />
+          )}
+          {state.run && state.run.currentRoomIndex !== null && (
+            <GameBoard state={state} onPlayCard={handlePlayCard} onEndTurn={handleEndTurn} />
+          )}
           {message && <div className="message">{message}</div>}
           {state?.pendingReward && (
             <RewardPanel
               options={state.pendingReward}
               onChoose={(card) => {
-                if (!state) return;
+                if (!state || !state.run) return;
                 state.deck.push({ ...card });
                 state.pendingReward = undefined;
-                // Next room: spawn a new scaled enemy
-                const mults: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
-                  easy: { heroHp: 1.2, enemyDamage: 0.8 },
-                  normal: { heroHp: 1, enemyDamage: 1 },
-                  hard: { heroHp: 0.8, enemyDamage: 1.2 },
-                };
-                const mult = mults[settings.difficulty];
-                const nextEnemyBase = shuffle(monsters.slice(0, 2))[0];
-                const nextEnemy = scaleEnemyStats(nextEnemyBase, state.hero.level);
-                nextEnemy.attack = Math.floor(nextEnemy.attack * mult.enemyDamage);
-                state.enemies = [nextEnemy];
-                state.roomIndex = (state.roomIndex || 0) + 1;
-                startTurn(state);
+                // Mark room completed and return to map
+                const room = state.run.rooms[state.run.currentRoomIndex!];
+                room.completed = true;
+                state.run.currentRoomIndex = null;
                 setMessage("");
                 setState({ ...state });
               }}
               onSkip={() => {
-                if (!state) return;
+                if (!state || !state.run) return;
                 state.pendingReward = undefined;
-                const mults: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
-                  easy: { heroHp: 1.2, enemyDamage: 0.8 },
-                  normal: { heroHp: 1, enemyDamage: 1 },
-                  hard: { heroHp: 0.8, enemyDamage: 1.2 },
-                };
-                const mult = mults[settings.difficulty];
-                const nextEnemyBase = shuffle(monsters.slice(0, 2))[0];
-                const nextEnemy = scaleEnemyStats(nextEnemyBase, state.hero.level);
-                nextEnemy.attack = Math.floor(nextEnemy.attack * mult.enemyDamage);
-                state.enemies = [nextEnemy];
-                state.roomIndex = (state.roomIndex || 0) + 1;
-                startTurn(state);
+                const room = state.run.rooms[state.run.currentRoomIndex!];
+                room.completed = true;
+                state.run.currentRoomIndex = null;
                 setMessage("");
                 setState({ ...state });
               }}
