@@ -79,28 +79,75 @@ const HeroPanel = React.memo(function HeroPanel({ state }: { state: GameState })
 });
 
 const EnemyPanel = React.memo(function EnemyPanel({ state, onSelectTarget }: { state: GameState; onSelectTarget: (idx: number) => void }) {
+  const getStatusSummary = (e: any) => {
+    const out: Array<{ label: string; value: string; cls?: string }> = [];
+    const s = e.status || {};
+    if (s.poison && s.poison > 0) out.push({ label: 'Poison', value: `-${s.poison} HP/turn`, cls: 'poison' });
+    if (s.burn && s.burn > 0) out.push({ label: 'Burn', value: `-${s.burn * 2} HP/turn`, cls: 'burn' });
+    if (s.freeze && s.freeze > 0) out.push({ label: 'Frozen', value: `Skips ${s.freeze} turn${s.freeze > 1 ? 's' : ''}`, cls: 'freeze' });
+    if (s.chill && s.chill > 0) out.push({ label: 'Chill', value: `Attack -30%`, cls: 'chill' });
+    for (const k of Object.keys(s)) {
+      if (!['poison','burn','freeze','chill'].includes(k)) {
+        out.push({ label: k, value: String(s[k]) });
+      }
+    }
+    return out;
+  };
+
+  const getEmojiForMonster = (id: string) => {
+    const low = id.toLowerCase();
+    if (low.includes('spider')) return '🕷️';
+    if (low.includes('rat')) return '🐀';
+    if (low.includes('skeleton')) return '💀';
+    if (low.includes('orc')) return '🗡️';
+    if (low.includes('wraith')) return '👻';
+    if (low.includes('overlord')) return '👹';
+    if (low.includes('king')) return '👑';
+    return '👾';
+  };
+
   return (
     <div className="enemy-panel">
       <h2>Enemies ({state.enemies.filter((e) => e.hp > 0).length})</h2>
       <div className="enemies">
-        {state.enemies.map((e, i) => (
-          <div key={i} className={`enemy ${e.hp <= 0 ? 'defeated' : ''}`} onClick={() => onSelectTarget(i)}>
-            <div className="enemy-header">
-              <div className="name">{e.name}</div>
-              {e.level && <div className="enemy-level">Lvl {e.level}</div>}
-            </div>
-            <div className="enemy-type">{e.type}</div>
-            <div className="hp">HP: {e.hp}</div>
-            <div className="attack">ATK: {e.attack}</div>
-            {e.status && Object.keys(e.status).length > 0 && (
-              <div className="statuses">
-                {Object.entries(e.status).map(([k, v]) => (
-                  <span key={k} className="status-pill">{k}: {v}</span>
-                ))}
+        {state.enemies.map((e, i) => {
+          const baseHP = e.baseHP || e.hp;
+          const hpRatio = Math.max(0, e.hp) / Math.max(1, baseHP);
+          const hpColor = hpRatio > 0.5 ? '#4a9' : hpRatio > 0.2 ? '#fa4' : '#f44';
+          const summaries = getStatusSummary(e);
+          const emoji = getEmojiForMonster(e.id);
+          return (
+            <div key={i} className={`enemy ${e.hp <= 0 ? 'defeated' : ''}`} onClick={() => onSelectTarget(i)}>
+              <div className="enemy-header">
+                <div className="name">{e.name}</div>
+                {e.level && <div className="enemy-level">Lvl {e.level}</div>}
               </div>
-            )}
-          </div>
-        ))}
+              <div className="enemy-type">{e.type}</div>
+
+              <div className="monster-avatar"><div className="avatar-emoji">{emoji}</div></div>
+
+              <div className="enemy-hp">
+                <div className="hp-bar">
+                  <div className="hp-fill" style={{ width: `${Math.min(100, Math.round(hpRatio * 100))}%`, background: hpColor }} />
+                </div>
+                <div className="hp-numbers">HP: {Math.max(0, e.hp)}/{baseHP}</div>
+              </div>
+
+              <div className="attack">ATK: {e.attack}</div>
+
+              {summaries.length > 0 && (
+                <div className="status-details">
+                  {summaries.map((s) => (
+                    <div key={s.label} className={`status-detail ${s.cls || ''}`}>
+                      <span className="status-name">{s.label}</span>
+                      <span className="status-desc">{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

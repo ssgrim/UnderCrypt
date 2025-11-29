@@ -1,11 +1,12 @@
 .game-board {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr auto;
   gap: 20px;
-  height: 100dvh;
+  height: 100%;
   padding: 20px;
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   position: relative;
+  overflow: hidden;
 }
 
 /* Enhanced background with animated particles effect */
@@ -35,6 +36,8 @@
   flex: 1;
   position: relative;
   z-index: 1;
+  overflow: auto;
+  min-height: 0;
 }
 
 .hero-panel {
@@ -170,7 +173,7 @@
 .enemy {
   background: linear-gradient(135deg, #2a1a1a 0%, #1a0a0a 100%);
   border: 2px solid #a55;
-  border-radius: 6px;
+  border-radius: 10px;
   padding: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -178,6 +181,9 @@
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(170, 85, 85, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .enemy::before {
@@ -196,6 +202,21 @@
   box-shadow: 0 0 15px rgba(255, 102, 102, 0.5), 0 4px 10px rgba(0, 0, 0, 0.6);
   transform: translateY(-4px) scale(1.03);
   background: linear-gradient(135deg, #3a2a2a 0%, #2a1a1a 100%);
+}
+
+.monster-avatar {
+  height: 72px;
+  border-radius: 8px;
+  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.08), transparent 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.avatar-emoji {
+  font-size: 40px;
+  filter: drop-shadow(0 2px 6px rgba(255,255,255,0.2));
 }
 
 .enemy:hover:not(.defeated)::after {
@@ -245,9 +266,15 @@
   font-style: italic;
 }
 
-.enemy .hp {
-  color: #4a9;
-  font-size: 12px;
+.enemy-hp {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hp-numbers {
+  font-size: 11px;
+  color: #ccc;
 }
 
 .enemy .attack {
@@ -255,37 +282,28 @@
   font-size: 12px;
 }
 
-.statuses {
+.status-details {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 4px;
   margin-top: 6px;
+}
+
+.status-detail {
+  display: flex;
   justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #bbb;
 }
 
-.status-pill {
-  background: linear-gradient(135deg, #4a3 0%, #2a5 100%);
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 9px;
-  font-weight: bold;
-  text-transform: uppercase;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  animation: statusPulse 2s ease-in-out infinite;
-}
+.status-detail.poison { color: #89d689; }
+.status-detail.freeze { color: #9fd4ff; }
+.status-detail.burn { color: #ff9b9b; }
+.status-detail.chill { color: #d4c6ff; }
 
-.status-pill[class*="poison"] {
-  background: linear-gradient(135deg, #5a2 0%, #3a4 100%);
-}
-
-.status-pill[class*="freeze"] {
-  background: linear-gradient(135deg, #4ac 0%, #2a8 100%);
-}
-
-.status-pill[class*="burn"] {
-  background: linear-gradient(135deg, #f44 0%, #a22 100%);
-}
+.status-name { font-weight: bold; }
+.status-desc { opacity: 0.9; }
 
 @keyframes statusPulse {
   0%, 100% { opacity: 1; transform: scale(1); }

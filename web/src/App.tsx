@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCallback } from "react";
 import { GameState, DungeonRoom, RunState } from "./types";
 import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle, awardEnemyXP, scaleEnemyStats } from "./gameEngine";
@@ -49,6 +49,25 @@ export function App() {
     return base;
   });
 
+  // Auto-scale UI to fit viewport so bottom controls remain visible
+  useEffect(() => {
+    const applyScale = () => {
+      const header = document.querySelector('.app-header') as HTMLElement | null;
+      const headerH = header ? header.offsetHeight : 0;
+      const availH = window.innerHeight - headerH;
+      const availW = window.innerWidth;
+      const baseH = 720; // baseline design height
+      const baseW = 1280; // baseline design width
+      const scaleH = availH / baseH;
+      const scaleW = availW / baseW;
+      const autoScale = Math.max(0.8, Math.min(1.5, Math.min(scaleH, scaleW)));
+      document.documentElement.style.setProperty('--ui-scale', String(autoScale));
+    };
+    applyScale();
+    window.addEventListener('resize', applyScale);
+    return () => window.removeEventListener('resize', applyScale);
+  }, []);
+
   const handleSelectHero = useCallback((heroId: string) => {
     setMessage("");
     try {
@@ -68,7 +87,7 @@ export function App() {
 
       // Generate dungeon rooms with monster previews
       const rooms = generateDungeonRooms(monsters, newState.hero.level, 6);
-      
+
       const runState: RunState = {
         act: 1,
         floor: 1,
@@ -135,12 +154,12 @@ export function App() {
       if (defeatedEnemies.length > 0 && !showLevelUp) {
         let leveledUp = false;
         let totalGold = 0;
-        
+
         for (const enemy of defeatedEnemies) {
           if (awardEnemyXP(state, enemy)) {
             leveledUp = true;
           }
-          
+
           // Award gold based on enemy type
           const goldRewards: Record<string, number> = {
             'Minion': 10,

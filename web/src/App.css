@@ -3,8 +3,8 @@
 }
 .app {
   height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
   background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #1a1f3a 100%);
   color: #eee;
   background-attachment: fixed;
@@ -91,10 +91,9 @@
 }
 
 .game-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
   position: relative;
   transform: scale(var(--ui-scale));
   transform-origin: top left;
