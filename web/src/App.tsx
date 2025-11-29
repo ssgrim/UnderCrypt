@@ -106,13 +106,18 @@ export function App() {
   const handleEndTurn = useCallback(() => {
     if (!state) return;
 
+    const defeatedEnemies = state.enemies.filter((e) => e.hp <= 0);
     state.enemies = state.enemies.filter((e) => e.hp > 0);
 
     if (state.enemies.length === 0) {
-      // Award XP for defeated enemy and check for level-up
-      if (state.enemies.length === 0 && !showLevelUp) {
-        const defeatedEnemy = state.enemies[0];
-        const leveledUp = awardEnemyXP(state, defeatedEnemy);
+      // Award XP for defeated enemies and check for level-up
+      if (defeatedEnemies.length > 0 && !showLevelUp) {
+        let leveledUp = false;
+        for (const enemy of defeatedEnemies) {
+          if (awardEnemyXP(state, enemy)) {
+            leveledUp = true;
+          }
+        }
 
         if (leveledUp) {
           setShowLevelUp(true);
