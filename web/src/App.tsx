@@ -7,6 +7,7 @@ import { GameBoard } from "./components/GameBoard";
 import { GameOptions } from "./components/GameOptions";
 import { HeroSelection } from "./components/HeroSelection";
 import { LevelUpPanel } from "./components/LevelUpPanel";
+import { RewardPanel } from "./components/RewardPanel";
 import "./App.css";
 import { playCardPlay, playDamage, playBlock, playHeal, playVictory, playDefeat, startBackgroundMusic, stopBackgroundMusic, setMusicVolume } from "./audio";
 
@@ -136,10 +137,11 @@ export function App() {
         }
       }
 
-      setGameOver(true);
-      setMessage("Victory! All enemies defeated.");
+      // Present reward options (3 random cards) if not leveling
+      const pool = shuffle(cards).filter((c) => c.type !== 'Relic');
+      state.pendingReward = pool.slice(0, 3);
+      setState({ ...state });
       if (settings.soundEnabled) playVictory();
-      stopBackgroundMusic();
       return;
     }
 
@@ -196,6 +198,49 @@ export function App() {
         <div className="game-container">
           <GameBoard state={state} onPlayCard={handlePlayCard} onEndTurn={handleEndTurn} />
           {message && <div className="message">{message}</div>}
+          {state?.pendingReward && (
+            <RewardPanel
+              options={state.pendingReward}
+              onChoose={(card) => {
+                if (!state) return;
+                state.deck.push({ ...card });
+                state.pendingReward = undefined;
+                // Next room: spawn a new scaled enemy
+                const mults: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
+                  easy: { heroHp: 1.2, enemyDamage: 0.8 },
+                  normal: { heroHp: 1, enemyDamage: 1 },
+                  hard: { heroHp: 0.8, enemyDamage: 1.2 },
+                };
+                const mult = mults[settings.difficulty];
+                const nextEnemyBase = shuffle(monsters.slice(0, 2))[0];
+                const nextEnemy = scaleEnemyStats(nextEnemyBase, state.hero.level);
+                nextEnemy.attack = Math.floor(nextEnemy.attack * mult.enemyDamage);
+                state.enemies = [nextEnemy];
+                state.roomIndex = (state.roomIndex || 0) + 1;
+                startTurn(state);
+                setMessage("");
+                setState({ ...state });
+              }}
+              onSkip={() => {
+                if (!state) return;
+                state.pendingReward = undefined;
+                const mults: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
+                  easy: { heroHp: 1.2, enemyDamage: 0.8 },
+                  normal: { heroHp: 1, enemyDamage: 1 },
+                  hard: { heroHp: 0.8, enemyDamage: 1.2 },
+                };
+                const mult = mults[settings.difficulty];
+                const nextEnemyBase = shuffle(monsters.slice(0, 2))[0];
+                const nextEnemy = scaleEnemyStats(nextEnemyBase, state.hero.level);
+                nextEnemy.attack = Math.floor(nextEnemy.attack * mult.enemyDamage);
+                state.enemies = [nextEnemy];
+                state.roomIndex = (state.roomIndex || 0) + 1;
+                startTurn(state);
+                setMessage("");
+                setState({ ...state });
+              }}
+            />
+          )}
           {showLevelUp && state && (
             <LevelUpPanel
               level={state.hero.level}

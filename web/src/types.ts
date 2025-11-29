@@ -46,6 +46,8 @@ export interface GameState {
   energy: number;
   maxEnergy: number;
   enemiesDefeated: number;
+  roomIndex?: number;
+  pendingReward?: Card[];
   // hero may have statuses at runtime
   // hero.status can be accessed as (state.hero as any).status
 }
