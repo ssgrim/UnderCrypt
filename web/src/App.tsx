@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCallback } from "react";
 import { GameState } from "./types";
-import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle, awardEnemyXP } from "./gameEngine";
+import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle, awardEnemyXP, scaleEnemyStats } from "./gameEngine";
 import { cards, heroes, monsters } from "./gameData";
 import { GameBoard } from "./components/GameBoard";
 import { GameOptions } from "./components/GameOptions";
@@ -39,32 +39,42 @@ export function App() {
   });
 
   const handleSelectHero = useCallback((heroId: string) => {
-    setSelectedHeroId(heroId);
-    const data = loadGameData(cards, heroes, monsters);
-    const newState = startGame(data, heroId as any);
-
-    // Apply difficulty multipliers
-    const difficultyMultipliers: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
-      easy: { heroHp: 1.2, enemyDamage: 0.8 },
-      normal: { heroHp: 1, enemyDamage: 1 },
-      hard: { heroHp: 0.8, enemyDamage: 1.2 },
-    };
-
-    const mult = difficultyMultipliers[settings.difficulty];
-    newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
-    newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
-
-    // Select random enemy and scale to hero level
-    const selectedEnemy = shuffle(monsters.slice(0, 2))[0];
-    const scaledEnemy = scaleEnemyStats(selectedEnemy, newState.hero.level);
-    scaledEnemy.attack = Math.floor(scaledEnemy.attack * mult.enemyDamage);
-    newState.enemies = [scaledEnemy];
-
-    setState(newState);
-    setGameOver(false);
     setMessage("");
-    startBackgroundMusic();
-    setMusicVolume(settings.musicVolume);
+    try {
+      const data = loadGameData(cards, heroes, monsters);
+      const newState = startGame(data, heroId as any);
+
+      // Apply difficulty multipliers
+      const difficultyMultipliers: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
+        easy: { heroHp: 1.2, enemyDamage: 0.8 },
+        normal: { heroHp: 1, enemyDamage: 1 },
+        hard: { heroHp: 0.8, enemyDamage: 1.2 },
+      };
+
+      const mult = difficultyMultipliers[settings.difficulty];
+      newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
+      newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
+
+      // Select random enemy and scale to hero level
+      const selectedEnemy = shuffle(monsters.slice(0, 2))[0];
+      const scaledEnemy = scaleEnemyStats(selectedEnemy, newState.hero.level);
+      scaledEnemy.attack = Math.floor(scaledEnemy.attack * mult.enemyDamage);
+      newState.enemies = [scaledEnemy];
+
+      // Only set selected hero after successful initialization
+      setSelectedHeroId(heroId);
+      setState(newState);
+      setGameOver(false);
+      setMessage("");
+      startBackgroundMusic();
+      setMusicVolume(settings.musicVolume);
+    } catch (e: any) {
+      const err = e?.message || String(e);
+      console.error('Failed to start game:', err);
+      setMessage(err);
+      setSelectedHeroId(null);
+      setState(null);
+    }
   }, [settings.difficulty, settings.musicVolume]);
 
   const handleStart = useCallback(() => {
