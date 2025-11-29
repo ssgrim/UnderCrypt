@@ -45,6 +45,7 @@
   text-align: center;
   margin-bottom: 50px;
   animation: slideDown 0.6s ease;
+  position: relative;
 }
 
 .selection-header h2 {
@@ -61,6 +62,49 @@
   font-size: 18px;
   color: #aaa;
   letter-spacing: 0.5px;
+}
+
+.shop-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  border: 2px solid #2a7;
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(74, 170, 153, 0.2);
+}
+
+.shop-btn:hover {
+  background: linear-gradient(135deg, #3a8 0%, #28a 100%);
+  box-shadow: 0 0 20px rgba(74, 170, 153, 0.6);
+  transform: translateY(-2px);
+}
+
+.shop-panel {
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+  border: 2px solid rgba(74, 170, 153, 0.4);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+  animation: fadeIn 0.4s ease;
+}
+
+.shop-panel h3 {
+  margin: 0 0 15px 0;
+  color: #4a9;
+  font-size: 24px;
+}
+
+.shop-notice {
+  color: #aaa;
+  margin: 0;
+  font-size: 16px;
 }
 
 .heroes-grid {

@@ -219,6 +219,16 @@ export const cards: Card[] = [
     element: 'Fire',
     tags: ['spell', 'aoe'],
   },
+  {
+    id: 'energy_surge',
+    name: 'Energy Surge',
+    type: 'Spell',
+    cost: 0,
+    effects: [{ type: 'energy', value: 2, target: 'self' }],
+    rarity: 'Common',
+    element: 'Neutral',
+    tags: ['utility'],
+  },
 ] as const;
 
 export const heroes: Hero[] = [
@@ -259,11 +269,11 @@ export const monsters: Monster[] = [
   { id: 'giant_rat', name: 'Giant Rat', type: 'Minion', hp: 25, attack: 8 },
   { id: 'skeleton_warrior', name: 'Skeleton Warrior', type: 'Minion', hp: 35, attack: 12 },
   { id: 'poison_spider', name: 'Poison Spider', type: 'Minion', hp: 20, attack: 6 },
-  
+
   // ELITES (Harder encounters)
   { id: 'orc_brute', name: 'Orc Brute', type: 'Elite', hp: 45, attack: 14 },
   { id: 'shadow_wraith', name: 'Shadow Wraith', type: 'Elite', hp: 65, attack: 18 },
-  
+
   // BOSSES (End of floor)
   { id: 'rat_king', name: 'Rat King', type: 'Boss', hp: 120, attack: 15 },
   { id: 'dungeon_overlord', name: 'Dungeon Overlord', type: 'Boss', hp: 200, attack: 25 },

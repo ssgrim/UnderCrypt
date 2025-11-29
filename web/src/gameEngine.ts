@@ -110,6 +110,10 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
       }
       continue;
     }
+    if (eff.type === 'energy') {
+      state.energy = Math.min(state.energy + eff.value, state.maxEnergy);
+      continue;
+    }
     if (eff.type === 'damage') {
       if (eff.target === 'self') {
         // Self-damage (e.g., from risky cards)
@@ -140,7 +144,7 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
 export function enemyTurn(state: GameState) {
   for (const m of state.enemies) {
     if (m.hp <= 0) continue;
-    
+
     // Freeze prevents action
     if (m.status && (m.status['freeze'] || 0) > 0) {
       m.status['freeze'] = Math.max(0, (m.status['freeze'] || 0) - 1);
@@ -233,6 +237,6 @@ export function awardEnemyXP(state: GameState, enemy: Monster) {
   // XP scales with enemy level (5% per level)
   const levelBonus = 1 + ((enemy.level || 1) - 1) * 0.05;
   const xp = Math.floor(baseXp * levelBonus);
-  
+
   return gainXP(state, xp);
 }

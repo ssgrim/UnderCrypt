@@ -5,7 +5,8 @@ export type Effect =
   | { type: 'status'; name: string; value: number; target: 'enemy' | 'self'; duration?: number }
   | { type: 'draw'; value: number; target: 'self' }
   | { type: 'poison'; value: number; target: 'enemy'; duration?: number }
-  | { type: 'freeze'; value: number; target: 'enemy'; duration?: number };
+  | { type: 'freeze'; value: number; target: 'enemy'; duration?: number }
+  | { type: 'energy'; value: number; target: 'self' };
 
 export interface Card {
   id: string;

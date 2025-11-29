@@ -9,13 +9,25 @@ interface HeroSelectionProps {
 }
 
 export function HeroSelection({ heroes, onSelectHero, selectedHero }: HeroSelectionProps) {
+  const [showShop, setShowShop] = React.useState(false);
+
   return (
     <div className="hero-selection-screen">
       <div className="hero-selection-container">
         <div className="selection-header">
           <h2>Choose Your Hero</h2>
           <p>Select a hero to begin your journey through UnderCrypt</p>
+          <button className="shop-btn" onClick={() => setShowShop(!showShop)}>
+            🛒 {showShop ? 'Hide Shop' : 'Shop'}
+          </button>
         </div>
+
+        {showShop && (
+          <div className="shop-panel">
+            <h3>Shop</h3>
+            <p className="shop-notice">Coming Soon! You'll be able to purchase card packs, relics, and upgrades here.</p>
+          </div>
+        )}
 
         <div className="heroes-grid">
           {heroes.map((hero) => (

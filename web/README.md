@@ -23,18 +23,21 @@ npm run preview   # Preview production build
 ## Features
 
 ### Combat System
+
 - **24 unique cards** with varied effects (attacks, defense, spells, utilities)
 - **Status effects** — Poison, Freeze, Burn, Chill
 - **Energy management** — Starts at 3, increases with level
 - **Block system** — Reduces incoming damage each turn
 
 ### Progression
+
 - **XP & Leveling** — Gain XP from battles, level up for stat boosts
 - **Dungeon exploration** — Strategic room selection with monster previews
 - **Room types** — Battle, Elite, Boss, Shop (placeholder), Event (placeholder)
 - **7 monster types** — 3 Minions, 2 Elites, 2 Bosses
 
 ### Polish
+
 - **Mobile responsive** — Optimized for phones and tablets
 - **UI scaling** — Adjustable from 0.9x to 1.5x via options
 - **Dynamic difficulty** — Enemies scale with hero level (8% HP, 5% attack per level)
