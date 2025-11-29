@@ -5,6 +5,7 @@ import { loadGameData, startGame, startTurn, playCard, enemyTurn, shuffle } from
 import { cards, heroes, monsters } from "./gameData";
 import { GameBoard } from "./components/GameBoard";
 import { GameOptions } from "./components/GameOptions";
+import { HeroSelection } from "./components/HeroSelection";
 import "./App.css";
 import { playCardPlay, playDamage, playBlock, playHeal, playVictory, playDefeat, startBackgroundMusic, stopBackgroundMusic, setMusicVolume } from "./audio";
 
@@ -24,6 +25,7 @@ export function App() {
   const [message, setMessage] = useState("");
   const [targetIdx, setTargetIdx] = useState(0);
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const [selectedHeroId, setSelectedHeroId] = useState<string | null>(null);
   const [settings, setSettings] = useState<GameSettings>(() => {
     const saved = localStorage.getItem("underCryptSettings");
     return saved ? JSON.parse(saved) : {
@@ -34,24 +36,52 @@ export function App() {
     };
   });
 
-  const handleStart = useCallback(() => {
+  const handleSelectHero = useCallback((heroId: string) => {
+    setSelectedHeroId(heroId);
     const data = loadGameData(cards, heroes, monsters);
-    const newState = startGame(data, "knight_of_ashes");
-    
+    const newState = startGame(data, heroId as any);
+
     // Apply difficulty multipliers
     const difficultyMultipliers: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
       easy: { heroHp: 1.2, enemyDamage: 0.8 },
       normal: { heroHp: 1, enemyDamage: 1 },
       hard: { heroHp: 0.8, enemyDamage: 1.2 },
     };
-    
+
     const mult = difficultyMultipliers[settings.difficulty];
     newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
     newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
-    
+
     newState.enemies = [{ ...shuffle(monsters.slice(0, 2))[0] }];
     newState.enemies[0].damage = Math.floor(newState.enemies[0].damage * mult.enemyDamage);
-    
+
+    setState(newState);
+    setGameOver(false);
+    setMessage("");
+    startBackgroundMusic();
+    setMusicVolume(settings.musicVolume);
+  }, [settings.difficulty, settings.musicVolume]);
+
+  const handleStart = useCallback(() => {
+    if (selectedHeroId) {
+      handleSelectHero(selectedHeroId);
+    }
+  }, [selectedHeroId, handleSelectHero]);
+
+    // Apply difficulty multipliers
+    const difficultyMultipliers: Record<Difficulty, { heroHp: number; enemyDamage: number }> = {
+      easy: { heroHp: 1.2, enemyDamage: 0.8 },
+      normal: { heroHp: 1, enemyDamage: 1 },
+      hard: { heroHp: 0.8, enemyDamage: 1.2 },
+    };
+
+    const mult = difficultyMultipliers[settings.difficulty];
+    newState.hero.hp = Math.floor(newState.hero.hp * mult.heroHp);
+    newState.hero.baseHP = Math.floor(newState.hero.baseHP * mult.heroHp);
+
+    newState.enemies = [{ ...shuffle(monsters.slice(0, 2))[0] }];
+    newState.enemies[0].damage = Math.floor(newState.enemies[0].damage * mult.enemyDamage);
+
     setState(newState);
     setGameOver(false);
     setMessage("");
@@ -110,11 +140,16 @@ export function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>UnderCrypt - Web Demo</h1>
+        <h1>UnderCrypt</h1>
         <div style={{ display: "flex", gap: "10px" }}>
           {state && (
-            <button className="start-btn" onClick={handleStart}>
-              New Game
+            <button className="start-btn" onClick={() => {
+              setSelectedHeroId(null);
+              setState(null);
+              setGameOver(false);
+              stopBackgroundMusic();
+            }}>
+              Back to Heroes
             </button>
           )}
           <button className="start-btn" onClick={() => setOptionsOpen(true)}>
@@ -123,13 +158,18 @@ export function App() {
         </div>
       </header>
 
-      {!state ? (
+      {!selectedHeroId ? (
+        <HeroSelection
+          heroes={heroes}
+          onSelectHero={(heroId) => {
+            setSelectedHeroId(heroId);
+            handleSelectHero(heroId);
+          }}
+          selectedHero={selectedHeroId || undefined}
+        />
+      ) : !state ? (
         <div className="start-screen">
-          <h2>Welcome to UnderCrypt</h2>
-          <p>A deck-building dungeon crawler</p>
-          <button className="start-btn" onClick={handleStart}>
-            Start Game
-          </button>
+          <h2>Game Starting...</h2>
         </div>
       ) : (
         <div className="game-container">
@@ -139,7 +179,13 @@ export function App() {
             <div className="game-over">
               <div className="modal">
                 <p>{message}</p>
-                <button onClick={handleStart}>Play Again</button>
+                <button onClick={() => {
+                  setSelectedHeroId(null);
+                  setState(null);
+                  setGameOver(false);
+                }}>
+                  Choose Another Hero
+                </button>
               </div>
             </div>
           )}

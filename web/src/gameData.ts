@@ -81,6 +81,16 @@ export const heroes: Hero[] = [
     passive: 'Pyromancer',
     active: 'Fireball',
   },
+  {
+    id: 'shadow_rogue',
+    name: 'Shadow Rogue',
+    class: 'Rogue',
+    baseHP: 50,
+    handSize: 6,
+    startingDeck: ['quick_slash', 'quick_slash', 'defend', 'poison_dagger', 'quick_slash', 'shield_wall'],
+    passive: 'Evasion',
+    active: 'Shadow Strike',
+  },
 ] as const;
 
 export const monsters: Monster[] = [

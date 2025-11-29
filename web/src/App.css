@@ -2,22 +2,44 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+  background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #1a1f3a 100%);
   color: #eee;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="%232a4d7a" stroke-width="0.5"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)" opacity="0.2"/></svg>');
   background-attachment: fixed;
   font-family: 'Arial', sans-serif;
   overflow: hidden;
+  position: relative;
+}
+
+/* Cave-themed background with atmospheric effects */
+.app::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(74, 144, 226, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(75, 0, 130, 0.03) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app > * {
+  position: relative;
+  z-index: 1;
 }
 
 .app-header {
-  background: linear-gradient(90deg, #0a0e27 0%, #1a3a52 100%);
+  background: linear-gradient(90deg, rgba(10, 14, 39, 0.95) 0%, rgba(26, 58, 82, 0.95) 100%);
   border-bottom: 3px solid #4a90e2;
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+  backdrop-filter: blur(5px);
 }
 
 .app-header h1 {
@@ -26,6 +48,7 @@
   color: #4a90e2;
   text-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .start-btn {

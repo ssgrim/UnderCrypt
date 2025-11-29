@@ -1,0 +1,317 @@
+.hero-selection-screen {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #16213e 100%);
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated cave background effect */
+.hero-selection-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 80%, rgba(74, 144, 226, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+  animation: caveShimmer 6s ease-in-out infinite;
+}
+
+@keyframes caveShimmer {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.hero-selection-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.selection-header {
+  text-align: center;
+  margin-bottom: 50px;
+  animation: slideDown 0.6s ease;
+}
+
+.selection-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 48px;
+  color: #4a90e2;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(74, 144, 226, 0.6);
+}
+
+.selection-header p {
+  margin: 0;
+  font-size: 18px;
+  color: #aaa;
+  letter-spacing: 0.5px;
+}
+
+.heroes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 40px;
+  animation: fadeIn 0.8s ease;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, rgba(26, 31, 58, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+  border: 3px solid rgba(74, 144, 226, 0.3);
+  border-radius: 12px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(74, 144, 226, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.hero-card:hover {
+  border-color: #4a90e2;
+  box-shadow: 0 0 20px rgba(74, 144, 226, 0.4);
+  transform: translateY(-5px);
+}
+
+.hero-card:hover::before {
+  left: 100%;
+}
+
+.hero-card.selected {
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.15) 0%, rgba(74, 170, 153, 0.15) 100%);
+  border-color: #4a90e2;
+  box-shadow: 0 0 30px rgba(74, 144, 226, 0.6), inset 0 0 20px rgba(74, 144, 226, 0.1);
+}
+
+.hero-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(74, 144, 226, 0.3);
+  padding-bottom: 12px;
+}
+
+.hero-card-header h3 {
+  margin: 0;
+  font-size: 24px;
+  color: #4a90e2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-class {
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat {
+  background: rgba(74, 144, 226, 0.1);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  color: #4a90e2;
+  font-weight: bold;
+}
+
+.hero-card-abilities {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ability {
+  background: rgba(74, 144, 226, 0.05);
+  border-left: 3px solid #4a90e2;
+  padding: 10px 12px;
+  border-radius: 4px;
+}
+
+.ability-label {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+.ability-name {
+  display: block;
+  font-size: 14px;
+  color: #4a90e2;
+  font-weight: bold;
+}
+
+.hero-card-description {
+  flex: 1;
+  background: rgba(74, 144, 226, 0.08);
+  border-radius: 6px;
+  padding: 12px;
+  border: 1px dashed rgba(74, 144, 226, 0.2);
+}
+
+.hero-card-description p {
+  margin: 0;
+  font-size: 14px;
+  color: #bbb;
+  line-height: 1.5;
+}
+
+.select-hero-btn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.2) 0%, rgba(74, 144, 226, 0.1) 100%);
+  border: 2px solid #4a90e2;
+  border-radius: 6px;
+  color: #4a90e2;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+}
+
+.hero-card.selected .select-hero-btn {
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  border-color: #2a7;
+  color: white;
+}
+
+.select-hero-btn:hover {
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.3) 0%, rgba(74, 144, 226, 0.2) 100%);
+  box-shadow: 0 0 15px rgba(74, 144, 226, 0.3);
+}
+
+.selection-footer {
+  display: flex;
+  justify-content: center;
+  animation: slideUp 0.6s ease;
+}
+
+.start-adventure-btn {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #4a9 0%, #38a 100%);
+  border: 2px solid #2a7;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+  box-shadow: 0 0 20px rgba(74, 170, 153, 0.3);
+}
+
+.start-adventure-btn:hover {
+  background: linear-gradient(135deg, #3a8 0%, #28a 100%);
+  box-shadow: 0 0 30px rgba(74, 170, 153, 0.5);
+  transform: translateY(-2px);
+}
+
+.start-adventure-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .heroes-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .selection-header h2 {
+    font-size: 32px;
+  }
+
+  .hero-card {
+    padding: 20px;
+  }
+}
