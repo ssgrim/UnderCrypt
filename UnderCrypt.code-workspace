@@ -11,5 +11,10 @@
       "editor.defaultFormatter": "ms-vscode.powershell",
       "editor.formatOnSave": true
     }
+  },
+  "extensions": {
+    "recommendations": [
+      "continue.continue"
+    ]
   }
 }

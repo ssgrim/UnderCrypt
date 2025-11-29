@@ -131,13 +131,28 @@ export function App() {
     state.enemies = state.enemies.filter((e) => e.hp > 0);
 
     if (state.enemies.length === 0) {
-      // Award XP for defeated enemies and check for level-up
+      // Award XP and Gold for defeated enemies
       if (defeatedEnemies.length > 0 && !showLevelUp) {
         let leveledUp = false;
+        let totalGold = 0;
+        
         for (const enemy of defeatedEnemies) {
           if (awardEnemyXP(state, enemy)) {
             leveledUp = true;
           }
+          
+          // Award gold based on enemy type
+          const goldRewards: Record<string, number> = {
+            'Minion': 10,
+            'Elite': 25,
+            'Boss': 75,
+          };
+          totalGold += goldRewards[enemy.type] || 10;
+        }
+
+        // Add gold to run state
+        if (state.run) {
+          state.run.gold += totalGold;
         }
 
         if (leveledUp) {

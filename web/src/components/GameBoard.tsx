@@ -61,6 +61,11 @@ const HeroPanel = React.memo(function HeroPanel({ state }: { state: GameState })
         <div className="stat">
           <span>Energy:</span> <strong>{state.energy}/{state.maxEnergy}</strong>
         </div>
+        {state.run && (
+          <div className="stat gold-stat">
+            <span>💰 Gold:</span> <strong>{state.run.gold}</strong>
+          </div>
+        )}
         <div className="stat">
           <span>XP:</span>
           <div className="xp-bar">

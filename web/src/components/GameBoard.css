@@ -98,6 +98,16 @@
   font-size: 14px;
 }
 
+.gold-stat {
+  color: #fc3;
+  font-weight: bold;
+}
+
+.gold-stat strong {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
 .stat span:first-child {
   min-width: 60px;
   color: #aaa;
@@ -245,6 +255,43 @@
   font-size: 12px;
 }
 
+.statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  justify-content: center;
+}
+
+.status-pill {
+  background: linear-gradient(135deg, #4a3 0%, #2a5 100%);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+.status-pill[class*="poison"] {
+  background: linear-gradient(135deg, #5a2 0%, #3a4 100%);
+}
+
+.status-pill[class*="freeze"] {
+  background: linear-gradient(135deg, #4ac 0%, #2a8 100%);
+}
+
+.status-pill[class*="burn"] {
+  background: linear-gradient(135deg, #f44 0%, #a22 100%);
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
 .bottom-section {
   display: flex;
   flex-direction: column;
@@ -284,6 +331,18 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   position: relative;
   overflow: hidden;
+  animation: cardDrawIn 0.4s ease-out;
+}
+
+@keyframes cardDrawIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Responsive adjustments for small screens */
