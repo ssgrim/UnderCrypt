@@ -8,6 +8,7 @@
 .reward-card.defense{border-color:#4a9}
 .reward-card.spell{border-color:#f4a}
 .reward-name{font-weight:bold;margin-bottom:6px}
+.reward-effects{font-size:11px;color:#bbb;margin-bottom:8px;min-height:16px}
 .reward-meta{font-size:12px;display:flex;gap:10px;justify-content:center;color:#aaa}
 .reward-actions{margin-top:16px;display:flex;justify-content:flex-end}
 .skip-btn{background:linear-gradient(135deg,#4a9 0%,#38a 100%);border:2px solid #2a7;border-radius:8px;padding:10px 16px;color:#fff;font-weight:bold;cursor:pointer}
