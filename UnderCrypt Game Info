@@ -1,0 +1,102 @@
+# Undercrypt: Hero's Descent - Game Info
+
+## Game Overview
+- **Type:** Solo deck-building dungeon crawler (inspired by Slay the Spire, Magic the Gathering)
+- **Players:** 1 (future: co-op/PvP)
+- **Goal:** Choose a hero, build your deck, clear all dungeon floors, defeat the final boss.
+
+## Core Gameplay Loop
+1. **Choose Hero** (4 unique classes)
+2. **Start with a 30-card deck** (themed to hero)
+3. **Explore dungeon floors** (3 floors, each with themed monsters, rooms, and bosses)
+4. **Combat:**
+   - Turn-based: Draw → Action → Enemy → End
+   - Play cards using energy (3 per turn)
+   - Defeat monsters, survive enemy turns
+5. **Progression:**
+   - Gain XP, level up (more HP, new cards, upgraded abilities)
+   - Collect loot: new cards, relics (passives), healing, gold
+   - Build and refine deck (add/remove cards, upgrade)
+6. **Victory:** Defeat all bosses. **Defeat:** Hero HP reaches 0.
+
+## Hero Classes
+- **Knight of Ashes (Warrior):** Tank, armor/block, heavy attacks
+- **Shadowmancer (Rogue):** Poison, card draw, curses
+- **Frost Witch (Mage):** Freeze, spell synergy, AoE
+- **Beast Tamer (Summoner):** Summons, healing, support
+
+Each hero has:
+- HP, hand size, starting deck
+- Passive ability (always on)
+- Active ability (costs energy, cooldown)
+
+## Card System
+- **Types:** Attack, Defense, Spell, Summon, Relic
+- **Properties:** Cost (energy), effects (damage, block, heal, poison, freeze, etc.), rarity, element, tags
+- **Deck:** 18–30 cards, built over run
+- **Sample Card:**
+  - Knight's Strike (Attack, 1 energy, Deal 6 damage)
+  - Defend (Defense, 1 energy, Gain 5 block)
+  - Flame Burst (Spell, 2 energy, Deal 8 AoE damage)
+
+## Dungeon & Monsters
+- **Floors:**
+  1. Vermin Nest (rats, spiders, Rat King boss)
+  2. Forgotten Crypt (skeletons, wraiths, Lich boss)
+  3. Dark Core (demons, cultists, Dungeon Overlord boss)
+- **Room Types:** Combat, Elite, Boss, Treasure, Shop
+- **Monster Types:** Minion, Elite, Boss (unique abilities, HP, attacks)
+
+## Turn Structure
+1. **Draw Phase:** Draw to hand size
+2. **Action Phase:** Play cards (spend energy)
+3. **Enemy Phase:** Monsters attack, trigger abilities
+4. **End Phase:** Discard, apply ongoing effects
+
+## Progression & Loot
+- **XP:** Defeat enemies, level up (HP, new cards, abilities)
+- **Loot:** New cards, relics, healing, gold
+- **Deckbuilding:** Add/remove/upgrade cards, synergy bonuses
+
+## Data & Types (see `/types` and `/data`)
+- **Card:** id, name, type, cost, description, effects[], element, rarity, tags
+- **Hero:** id, name, class, HP, handSize, startingDeck[], passive/active abilities
+- **Monster:** id, name, type, HP, attack, abilities[], loot, xpReward
+- **Room/Floor:** id, name, description, rooms[] (combat, boss, shop, etc.)
+
+## Main Engine Functions (see `lib/game-engine.ts`)
+- `loadGameData(cards, heroes, monsters)`
+- `startGame(heroId)`
+- `startTurn()`
+- `playCard(index, target)`
+- `enemyTurn()`
+- `applyEffects()`
+- `processStatusEffects()`
+- `drawToHandSize()`
+- `shuffleDeck()`
+
+## Example Data (see `/data/*.json`)
+- **Card:**
+  ```json
+  { "id": "knight_strike", "name": "Knight's Strike", "type": "Attack", "cost": 1, "effects": [{ "type": "damage", "value": 6, "target": "enemy" }], ... }
+  ```
+- **Hero:**
+  ```json
+  { "id": "knight_of_ashes", "name": "Knight of Ashes", "class": "Warrior", "baseHP": 80, "handSize": 5, "startingDeck": [ ... ], ... }
+  ```
+- **Monster:**
+  ```json
+  { "id": "giant_rat", "name": "Giant Rat", "type": "Minion", "hp": 25, "attack": 8, "abilities": [ ... ], ... }
+  ```
+- **Floor:**
+  ```json
+  { "id": "vermin_nest", "name": "Vermin Nest", "rooms": [ ... ] }
+  ```
+
+## For Developers
+- **Add new cards/heroes/monsters** by editing JSON in `/data` and updating types in `/types`.
+- **Game logic** is in `lib/game-engine.ts` (see methods above).
+- **UI**: React/Next.js in `/app` and `/components`.
+
+---
+This document summarizes the game requirements, data, and main functions. Use it to prompt an AI for further coding or design tasks.

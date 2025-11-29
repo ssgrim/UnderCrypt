@@ -1,0 +1,59 @@
+.particle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  font-weight: bold;
+  font-size: 14px;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+  animation: floatUp 1.5s ease-out forwards;
+}
+
+.particle-damage {
+  color: #ff6b6b;
+  text-shadow: 0 0 8px rgba(255, 107, 107, 0.8), 0 0 4px rgba(255, 0, 0, 0.6);
+  font-weight: 900;
+}
+
+.particle-heal {
+  color: #4a9;
+  text-shadow: 0 0 8px rgba(74, 170, 153, 0.8), 0 0 4px rgba(100, 200, 150, 0.6);
+  font-weight: 800;
+}
+
+.particle-block {
+  color: #4a90e2;
+  text-shadow: 0 0 8px rgba(74, 144, 226, 0.8), 0 0 4px rgba(100, 150, 255, 0.6);
+  font-weight: 800;
+}
+
+.particle-xp {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8), 0 0 4px rgba(255, 200, 0, 0.6);
+  font-weight: 900;
+  font-size: 16px;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(0.8);
+  }
+}
