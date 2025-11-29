@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 100vh;
+  height: 100dvh;
   padding: 20px;
   background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   position: relative;
@@ -284,6 +284,22 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   position: relative;
   overflow: hidden;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 480px) {
+  .game-board { padding: 12px; gap: 12px; }
+  .top-section { grid-template-columns: 1fr; }
+  .hero-panel, .enemy-panel { padding: 12px; }
+  .stats { gap: 10px; }
+  .stat { font-size: 13px; }
+  .enemies { grid-template-columns: repeat(2, 1fr); }
+  .bottom-section { padding: 12px; }
+  .hand { gap: 8px; }
+  .card-btn { min-width: 92px; padding: 8px; font-size: 11px; }
+  .card-name { font-size: 10px; }
+  .card-cost { font-size: 9px; }
+  .enemy .hp, .enemy .attack { font-size: 11px; }
 }
 
 /* Card shine effect on hover */
