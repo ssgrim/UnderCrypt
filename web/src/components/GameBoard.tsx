@@ -1,5 +1,6 @@
 import React from 'react';
 import { GameState } from '../types';
+import { getCardDescription, getCardEmoji } from '../cardHelpers';
 import './GameBoard.css';
 
 interface Props {
@@ -121,17 +122,28 @@ const CardButton = React.memo(function CardButton({
   canPlay: boolean;
   onPlay: () => void;
 }) {
+  const [showTooltip, setShowTooltip] = React.useState(false);
+  
   return (
-    <button className={`card-btn ${card.type.toLowerCase()} ${!canPlay ? 'disabled' : ''}`} onClick={onPlay} disabled={!canPlay}>
-      <div className="card-name">{card.name}</div>
-      <div className="card-cost">{card.cost}</div>
-      <div className="card-effect">
-        {card.effects.map((e: any, i: number) => (
-          <div key={i} className="effect">
-            {e.type}: {e.value}
+    <div className="card-button-wrapper" onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+      <button className={`card-btn ${card.type.toLowerCase()} ${!canPlay ? 'disabled' : ''}`} onClick={onPlay} disabled={!canPlay}>
+        <div className="card-emoji">{getCardEmoji(card.id)}</div>
+        <div className="card-name">{card.name}</div>
+        <div className="card-cost">{card.cost}</div>
+      </button>
+      {showTooltip && (
+        <div className="card-tooltip">
+          <div className="tooltip-name">{card.name}</div>
+          <div className="tooltip-description">{getCardDescription(card.id)}</div>
+          <div className="tooltip-effects">
+            {card.effects.map((e: any, i: number) => (
+              <div key={i} className="tooltip-effect">
+                <span className="effect-type">{e.type}</span>: {e.value}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </button>
+        </div>
+      )}
+    </div>
   );
 });

@@ -1,41 +1,13 @@
 import { Card, Hero, Monster } from './types';
 
 export const cards: Card[] = [
-    // Game data is cached and reused across renders
+  // BASIC ATTACKS
   {
     id: 'knight_strike',
     name: 'Knight\'s Strike',
     type: 'Attack',
     cost: 1,
     effects: [{ type: 'damage', value: 6, target: 'enemy' }],
-  },
-  {
-    id: 'defend',
-    name: 'Defend',
-    type: 'Defense',
-    cost: 1,
-    effects: [{ type: 'block', value: 5, target: 'self' }],
-  },
-  {
-    id: 'flame_burst',
-    name: 'Flame Burst',
-    type: 'Spell',
-    cost: 2,
-    effects: [{ type: 'damage', value: 8, target: 'all_enemies' }],
-  },
-  {
-    id: 'heal_potion',
-    name: 'Heal Potion',
-    type: 'Spell',
-    cost: 1,
-    effects: [{ type: 'heal', value: 10, target: 'self' }],
-  },
-  {
-    id: 'heavy_strike',
-    name: 'Heavy Strike',
-    type: 'Attack',
-    cost: 2,
-    effects: [{ type: 'damage', value: 12, target: 'enemy' }],
   },
   {
     id: 'quick_slash',
@@ -45,11 +17,20 @@ export const cards: Card[] = [
     effects: [{ type: 'damage', value: 4, target: 'enemy' }],
   },
   {
-    id: 'poison_dagger',
-    name: 'Poison Dagger',
+    id: 'heavy_strike',
+    name: 'Heavy Strike',
     type: 'Attack',
+    cost: 2,
+    effects: [{ type: 'damage', value: 12, target: 'enemy' }],
+  },
+  
+  // DEFENSIVE CARDS
+  {
+    id: 'defend',
+    name: 'Defend',
+    type: 'Defense',
     cost: 1,
-    effects: [{ type: 'damage', value: 3, target: 'enemy' }, { type: 'status', name: 'poison', value: 2, target: 'enemy' }],
+    effects: [{ type: 'block', value: 5, target: 'self' }],
   },
   {
     id: 'shield_wall',
@@ -57,7 +38,92 @@ export const cards: Card[] = [
     type: 'Defense',
     cost: 2,
     effects: [{ type: 'block', value: 12, target: 'self' }],
-  }
+  },
+  {
+    id: 'brace_for_impact',
+    name: 'Brace for Impact',
+    type: 'Defense',
+    cost: 1,
+    effects: [{ type: 'block', value: 8, target: 'self' }],
+  },
+  
+  // SPELL CARDS WITH SPECIAL EFFECTS
+  {
+    id: 'flame_burst',
+    name: 'Flame Burst',
+    type: 'Spell',
+    cost: 2,
+    effects: [{ type: 'damage', value: 8, target: 'all_enemies' }, { type: 'status', name: 'burn', value: 1, target: 'enemy' }],
+  },
+  {
+    id: 'frost_bolt',
+    name: 'Frost Bolt',
+    type: 'Spell',
+    cost: 2,
+    effects: [{ type: 'damage', value: 6, target: 'enemy' }, { type: 'status', name: 'chill', value: 2, target: 'enemy' }],
+  },
+  {
+    id: 'arcane_bolt',
+    name: 'Arcane Bolt',
+    type: 'Spell',
+    cost: 1,
+    effects: [{ type: 'damage', value: 5, target: 'enemy' }],
+  },
+  
+  // POISON & STATUS EFFECTS
+  {
+    id: 'poison_dagger',
+    name: 'Poison Dagger',
+    type: 'Attack',
+    cost: 1,
+    effects: [{ type: 'damage', value: 3, target: 'enemy' }, { type: 'status', name: 'poison', value: 2, target: 'enemy' }],
+  },
+  {
+    id: 'venomous_strike',
+    name: 'Venomous Strike',
+    type: 'Attack',
+    cost: 2,
+    effects: [{ type: 'damage', value: 5, target: 'enemy' }, { type: 'status', name: 'poison', value: 3, target: 'enemy' }],
+  },
+  
+  // HEALING & UTILITY
+  {
+    id: 'heal_potion',
+    name: 'Heal Potion',
+    type: 'Spell',
+    cost: 1,
+    effects: [{ type: 'heal', value: 10, target: 'self' }],
+  },
+  {
+    id: 'greater_healing',
+    name: 'Greater Healing',
+    type: 'Spell',
+    cost: 3,
+    effects: [{ type: 'heal', value: 20, target: 'self' }],
+  },
+  {
+    id: 'inspiring_shout',
+    name: 'Inspiring Shout',
+    type: 'Spell',
+    cost: 1,
+    effects: [{ type: 'heal', value: 5, target: 'self' }, { type: 'damage', value: 4, target: 'all_enemies' }],
+  },
+  
+  // COMBO & DRAW CARDS
+  {
+    id: 'second_wind',
+    name: 'Second Wind',
+    type: 'Spell',
+    cost: 0,
+    effects: [{ type: 'draw', value: 1, target: 'self' }],
+  },
+  {
+    id: 'momentum',
+    name: 'Momentum',
+    type: 'Spell',
+    cost: 1,
+    effects: [{ type: 'heal', value: 3, target: 'self' }, { type: 'draw', value: 2, target: 'self' }],
+  },
 ] as const;
 
 export const heroes: Hero[] = [

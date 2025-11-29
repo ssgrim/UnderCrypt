@@ -1,8 +1,9 @@
 export type Effect =
   | { type: 'damage'; value: number; target: 'enemy' | 'all_enemies' }
   | { type: 'block'; value: number; target: 'self' }
-  | { type: 'heal'; value: number; target: 'self' };
-  | { type: 'status'; name: string; value: number; target: 'enemy' | 'self' };
+  | { type: 'heal'; value: number; target: 'self' }
+  | { type: 'status'; name: string; value: number; target: 'enemy' | 'self' }
+  | { type: 'draw'; value: number; target: 'self' };
 
 export interface Card {
   id: string;

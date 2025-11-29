@@ -152,6 +152,18 @@
   min-width: 100px;
   text-align: center;
   font-size: 12px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-button-wrapper {
+  position: relative;
+}
+
+.card-emoji {
+  font-size: 24px;
+  margin-bottom: 5px;
 }
 
 .card-btn:hover:not(:disabled) {
@@ -181,6 +193,7 @@
 .card-name {
   font-weight: bold;
   margin-bottom: 5px;
+  font-size: 11px;
 }
 
 .card-cost {
@@ -188,17 +201,69 @@
   border-radius: 3px;
   padding: 2px 6px;
   display: inline-block;
-  font-size: 11px;
-  margin-bottom: 5px;
-}
-
-.card-effect {
   font-size: 10px;
-  color: #aaa;
+  margin-top: 5px;
+  color: #4a9;
+  font-weight: bold;
 }
 
-.effect {
+.card-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1a1f3a 0%, #2a3a5a 100%);
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 180px;
+  margin-bottom: 10px;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+  animation: tooltipAppear 0.2s ease;
+}
+
+@keyframes tooltipAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.tooltip-name {
+  color: #4a90e2;
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tooltip-description {
+  color: #bbb;
+  font-size: 12px;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.tooltip-effects {
+  border-top: 1px solid rgba(74, 144, 226, 0.3);
+  padding-top: 6px;
+}
+
+.tooltip-effect {
+  color: #aaa;
+  font-size: 11px;
   margin: 2px 0;
+}
+
+.effect-type {
+  color: #4a90e2;
+  font-weight: bold;
 }
 
 .end-turn-btn {

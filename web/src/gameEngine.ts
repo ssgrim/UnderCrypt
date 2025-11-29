@@ -88,6 +88,14 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
       state.hero.block += eff.value;
     } else if (eff.type === 'heal') {
       state.hero.hp = Math.min(state.hero.baseHP, state.hero.hp + eff.value);
+    } else if ((eff as any).type === 'draw') {
+      for (let i = 0; i < (eff as any).value; i++) {
+        if (state.deck.length === 0) {
+          state.deck = shuffle(state.discard.splice(0));
+        }
+        const drawnCard = state.deck.shift();
+        if (drawnCard) state.hand.push(drawnCard);
+      }
     }
   }
 
@@ -101,7 +109,13 @@ export function enemyTurn(state: GameState) {
       m.status['frozen'] = Math.max(0, (m.status['frozen'] || 0) - 1);
       continue;
     }
-    const dmg = Math.max(0, m.attack - state.hero.block);
+    
+    // Calculate damage, reduced by chill
+    let dmg = m.attack;
+    if (m.status && (m.status['chill'] || 0) > 0) {
+      dmg = Math.floor(dmg * 0.7); // Chill reduces damage by 30%
+    }
+    dmg = Math.max(0, dmg - state.hero.block);
     state.hero.hp -= dmg;
   }
 }
@@ -109,10 +123,25 @@ export function enemyTurn(state: GameState) {
 export function processStatusEffects(state: GameState) {
   for (const m of state.enemies) {
     if (!m.status) continue;
+    
+    // Poison damage
     if (m.status['poison'] && m.status['poison'] > 0) {
       m.hp -= m.status['poison'];
       m.status['poison'] = Math.max(0, m.status['poison'] - 1);
     }
+    
+    // Burn damage (similar to poison)
+    if (m.status['burn'] && m.status['burn'] > 0) {
+      m.hp -= m.status['burn'] * 2;
+      m.status['burn'] = Math.max(0, m.status['burn'] - 1);
+    }
+    
+    // Chill reduces attack power (handled in enemyTurn)
+    if (m.status['chill'] && m.status['chill'] > 0) {
+      m.status['chill'] = Math.max(0, m.status['chill'] - 1);
+    }
+    
+    // Clean up expired statuses
     for (const k of Object.keys(m.status)) {
       if ((m.status as any)[k] === 0) delete (m.status as any)[k];
     }
@@ -123,6 +152,10 @@ export function processStatusEffects(state: GameState) {
     if (hStatus['poison'] && hStatus['poison'] > 0) {
       state.hero.hp -= hStatus['poison'];
       hStatus['poison'] = Math.max(0, hStatus['poison'] - 1);
+    }
+    if (hStatus['burn'] && hStatus['burn'] > 0) {
+      state.hero.hp -= hStatus['burn'] * 2;
+      hStatus['burn'] = Math.max(0, hStatus['burn'] - 1);
     }
     for (const k of Object.keys(hStatus)) {
       if ((hStatus as any)[k] === 0) delete (hStatus as any)[k];
