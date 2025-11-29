@@ -1,9 +1,11 @@
 export type Effect =
-  | { type: 'damage'; value: number; target: 'enemy' | 'all_enemies' }
+  | { type: 'damage'; value: number; target: 'enemy' | 'all_enemies' | 'self' }
   | { type: 'block'; value: number; target: 'self' }
   | { type: 'heal'; value: number; target: 'self' }
-  | { type: 'status'; name: string; value: number; target: 'enemy' | 'self' }
-  | { type: 'draw'; value: number; target: 'self' };
+  | { type: 'status'; name: string; value: number; target: 'enemy' | 'self'; duration?: number }
+  | { type: 'draw'; value: number; target: 'self' }
+  | { type: 'poison'; value: number; target: 'enemy'; duration?: number }
+  | { type: 'freeze'; value: number; target: 'enemy'; duration?: number };
 
 export interface Card {
   id: string;
@@ -11,8 +13,9 @@ export interface Card {
   type: 'Attack' | 'Defense' | 'Spell' | 'Summon' | 'Relic';
   cost: number;
   effects: Effect[];
-  rarity?: string;
+  rarity?: 'Common' | 'Uncommon' | 'Rare' | 'Epic' | 'Legendary';
   tags?: string[];
+  element?: string;
 }
 
 export interface Hero {

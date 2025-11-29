@@ -14,24 +14,26 @@ export function loadGameData(cards: Card[], heroes: Hero[], monsters: Monster[])
 }
 
 export function scaleEnemyStats(enemy: Monster, heroLevel: number): Monster {
-  // Scale difficulty multiplier based on hero level (2% per level)
-  const levelMultiplier = 1 + (heroLevel - 1) * 0.02;
+  // More aggressive scaling: 8% HP and 5% attack per level
+  const hpMultiplier = 1 + (heroLevel - 1) * 0.08;
+  const attackMultiplier = 1 + (heroLevel - 1) * 0.05;
 
   // Type-based multiplier for additional scaling
   const typeMultipliers: Record<'Minion' | 'Elite' | 'Boss', number> = {
     'Minion': 1.0,
-    'Elite': 1.3,
-    'Boss': 1.6,
+    'Elite': 1.4,
+    'Boss': 1.8,
   };
 
-  const totalMultiplier = levelMultiplier * typeMultipliers[enemy.type];
+  const hpTotal = hpMultiplier * typeMultipliers[enemy.type];
+  const attackTotal = attackMultiplier * typeMultipliers[enemy.type];
 
   return {
     ...enemy,
     level: heroLevel,
     baseHP: enemy.hp,
-    hp: Math.floor(enemy.hp * totalMultiplier),
-    attack: Math.floor(enemy.attack * levelMultiplier),
+    hp: Math.floor(enemy.hp * hpTotal),
+    attack: Math.floor(enemy.attack * attackTotal),
   };
 }
 
@@ -100,12 +102,22 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
       }
       continue;
     }
-    if (eff.type === 'damage') {
-      if (state.enemies[targetIndex]) {
-        state.enemies[targetIndex].hp -= eff.value;
+    if (eff.type === 'poison' || eff.type === 'freeze') {
+      const m = state.enemies[targetIndex];
+      if (m) {
+        m.status = m.status || {};
+        m.status[eff.type] = (m.status[eff.type] || 0) + eff.value;
       }
-      if (eff.target === 'all_enemies') {
+      continue;
+    }
+    if (eff.type === 'damage') {
+      if (eff.target === 'self') {
+        // Self-damage (e.g., from risky cards)
+        state.hero.hp -= eff.value;
+      } else if (eff.target === 'all_enemies') {
         state.enemies.forEach((e) => (e.hp -= eff.value));
+      } else if (state.enemies[targetIndex]) {
+        state.enemies[targetIndex].hp -= eff.value;
       }
     } else if (eff.type === 'block') {
       state.hero.block += eff.value;
@@ -128,8 +140,10 @@ export function playCard(state: GameState, handIndex: number, targetIndex = 0) {
 export function enemyTurn(state: GameState) {
   for (const m of state.enemies) {
     if (m.hp <= 0) continue;
-    if (m.status && (m.status['frozen'] || 0) > 0) {
-      m.status['frozen'] = Math.max(0, (m.status['frozen'] || 0) - 1);
+    
+    // Freeze prevents action
+    if (m.status && (m.status['freeze'] || 0) > 0) {
+      m.status['freeze'] = Math.max(0, (m.status['freeze'] || 0) - 1);
       continue;
     }
 
@@ -208,13 +222,17 @@ export function gainXP(state: GameState, amount: number): boolean {
 }
 
 export function awardEnemyXP(state: GameState, enemy: Monster) {
-  // Award XP based on enemy type
-  const xpRewards: Record<string, number> = {
-    'Minion': 25,
-    'Elite': 50,
-    'Boss': 100,
+  // Award XP based on enemy type and level
+  const baseXpRewards: Record<string, number> = {
+    'Minion': 20,
+    'Elite': 45,
+    'Boss': 120,
   };
 
-  const xp = xpRewards[enemy.type] || 25;
+  const baseXp = baseXpRewards[enemy.type] || 20;
+  // XP scales with enemy level (5% per level)
+  const levelBonus = 1 + ((enemy.level || 1) - 1) * 0.05;
+  const xp = Math.floor(baseXp * levelBonus);
+  
   return gainXP(state, xp);
 }

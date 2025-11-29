@@ -1,31 +1,43 @@
 # UnderCrypt Web Demo
 
-A minimal Vite + React web UI for playing UnderCrypt (deck-building roguelike).
+A mobile-optimized deck-building roguelike with dungeon exploration and strategic combat.
 
 ## Setup & Run
 
 ```powershell
 cd web
 npm install
-npm run dev
+npm run dev       # Development server
+npm run build     # Production build
+npm run preview   # Preview production build
 ```
-
-The browser should open automatically at http://localhost:3000.
 
 ## How to Play
 
-1. Click **Start Game** to begin.
-2. Click cards in your hand to play them (if you have enough energy).
-3. Click **End Turn** to let the enemy attack.
-4. Defeat all enemies or game over when your HP reaches 0.
+1. **Hero Selection** — Choose your hero (Knight, Mage, or Rogue)
+2. **Dungeon Map** — Select rooms to explore; see enemy previews before entering
+3. **Combat** — Play cards from your hand (costs energy) to defeat enemies
+4. **Rewards** — Choose 1 of 3 cards after victory to improve your deck
+5. **Progress** — Complete all rooms to advance to the next act
 
 ## Features
 
-- Click-to-play card UI
-- Hero HP and block tracking
-- Enemy health bars
-- Energy management
-- Victory/defeat modal
+### Combat System
+- **24 unique cards** with varied effects (attacks, defense, spells, utilities)
+- **Status effects** — Poison, Freeze, Burn, Chill
+- **Energy management** — Starts at 3, increases with level
+- **Block system** — Reduces incoming damage each turn
+
+### Progression
+- **XP & Leveling** — Gain XP from battles, level up for stat boosts
+- **Dungeon exploration** — Strategic room selection with monster previews
+- **Room types** — Battle, Elite, Boss, Shop (placeholder), Event (placeholder)
+- **7 monster types** — 3 Minions, 2 Elites, 2 Bosses
+
+### Polish
+- **Mobile responsive** — Optimized for phones and tablets
+- **UI scaling** — Adjustable from 0.9x to 1.5x via options
+- **Dynamic difficulty** — Enemies scale with hero level (8% HP, 5% attack per level)
 
 ## Files
 
